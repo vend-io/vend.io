@@ -8,3 +8,9 @@ Known bugs
 ----------
 
 Machine does not yet exist.
+
+## Usage
+
+```bash
+npm i && node index.js
+```
