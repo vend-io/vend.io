@@ -2,6 +2,7 @@
 var model_1 = require('./src/model');
 var State = require('./src/states');
 var FSM = require('state.js');
+FSM.setConsole(console);
 var model = new model_1.default();
 var operational = new State.VMOperationalState(model);
 var idle = new State.VMIdleState(operational);

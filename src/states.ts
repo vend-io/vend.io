@@ -1,8 +1,6 @@
 import * as FSM from 'state.js'
 import VMModel from './model';
 
-FSM.setConsole(console)
-
 /**
  * Operational:
  * |----------------------------------------------|

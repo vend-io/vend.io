@@ -2,6 +2,8 @@ import VMModel from './src/model';
 import * as State from './src/states';
 import * as FSM from 'state.js'
 
+FSM.setConsole(console)
+
 var model = new VMModel()
 var operational = new State.VMOperationalState(model)
 var idle = new State.VMIdleState(operational)
