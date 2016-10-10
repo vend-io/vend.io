@@ -1,0 +1,17 @@
+"use strict";
+var model_1 = require('./src/model');
+var State = require('./src/states');
+var FSM = require('state.js');
+var model = new model_1.default();
+var operational = new State.VMOperationalState(model);
+var idle = new State.VMIdleState(operational);
+var active = new State.VMActiveState(operational);
+operational.transition('start', 'operational');
+idle.transition('start', 'idle');
+idle.transition('idle', active.state('coinInserted')).when(function (s) { return s === 'coinInserted'; });
+idle.transition('idle', active.state('itemSelected')).when(function (s) { return s === 'itemSelected'; });
+active.transition('active', idle.state('idle')).when(function (s) { return s === 'canceled'; });
+FSM.validate(model);
+var instance = new FSM.StateMachineInstance("instance");
+FSM.initialise(model, instance);
+FSM.evaluate(model, instance, 'coinInserted');

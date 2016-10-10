@@ -1,0 +1,33 @@
+{
+  "name": "vend.io",
+  "version": "1.0.0",
+  "description": "An open source framework for vending machines.",
+  "private": true,
+  "main": "index.js",
+  "dependencies": {
+    "state.js": "^5.10.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vend-io/vend.io.git"
+  },
+  "keywords": [
+    "vendingmachine",
+    "vending",
+    "machine",
+    "framework",
+    "vendio",
+    "raspberrypi",
+    "rapsberry-pi"
+  ],
+  "author": "iwatakeshi",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/vend-io/vend.io/issues"
+  },
+  "homepage": "https://github.com/vend-io/vend.io#readme"
+}
