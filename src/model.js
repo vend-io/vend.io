@@ -4,11 +4,11 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var FSM = require('state.js');
+var FSM = require("state.js");
 var VMModel = (function (_super) {
     __extends(VMModel, _super);
     function VMModel() {
-        _super.call(this, 'vm-model');
+        return _super.call(this, 'vm-model') || this;
     }
     return VMModel;
 }(FSM.StateMachine));

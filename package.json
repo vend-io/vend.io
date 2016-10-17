@@ -5,6 +5,8 @@
   "private": true,
   "main": "index.js",
   "dependencies": {
+    "@types/lodash": "^4.14.37",
+    "lodash": "^4.16.4",
     "state.js": "^5.10.0"
   },
   "devDependencies": {},
