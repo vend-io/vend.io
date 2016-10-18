@@ -1,8 +1,11 @@
 import VMModel from './model';
 import * as State from './states';
-import * as FSM from 'state.js'
+import * as FSM from 'state.js';
 import * as _ from 'lodash';
+import { logger } from './util';
 
+///<reference types="./typings/node/node.d.ts" />
+// import { EventEmitter } from 'events';
 
 export enum VMActions {
   InsertCoin,
@@ -20,10 +23,7 @@ export class VMStateMachine {
   protected service: State.VMServiceState;
   protected instance: FSM.StateMachineInstance;
   protected actions: { [x: number]: string }
-  constructor() {
-    this.setupStateMachine()
-  }
-  private setupStateMachine() {
+  protected setupStateMachine() {
     this.setupStateMachineActions();
     this.setupStateMachineStates()
     this.setupStateMachineTransitions()
@@ -68,7 +68,7 @@ export class VMStateMachine {
     // Transition from 'idle' state to 'active' state when item is selected
     this.idle
       .transition(this.active.state(this.actions[VMActions.SelectItem]))
-      .when(itemSelected);
+      .when(itemSelected)
     // Transition from 'idle' state to 'service' state when authenticated
     this.idle
       .transition(this.service.state())
@@ -81,41 +81,35 @@ export class VMStateMachine {
     this.service
       .transition(this.idle.state())
       .when(s => canceled(s) || completed(s));
+
   }
   protected evaluate(action: VMActions) {
     FSM.evaluate(this.model, this.instance, this.actions[action])
   }
 }
 
-export class VM extends VMStateMachine {
+
+export abstract class VMCore extends VMStateMachine {
     protected defaults = {
       debug: false
     };
+    // events: EventEmitter
     constructor(options: any = {}) {
       super()
+      // this.events = new EventEmitter();
       _.defaultsDeep(options, this.defaults)
-      if (options.debug) FSM.setConsole(console)
+      if (options.debug) FSM.setConsole(logger)
+      super.setupStateMachine()
     }
-    get states (): ({ idle: FSM.State, active: FSM.State, service: FSM.State }) {
-      return {
-        idle: this.idle.state(),
-        active: this.active.state(),
-        service: this.service.state()
-      }
+    protected get states (): ({
+      idle: State.VMIdleState,
+      active: State.VMActiveState,
+      service: State.VMServiceState }) {
+      return { idle: this.idle, active: this.active, service: this.service }
     }
-    insertCoin() {
-      this.evaluate(VMActions.InsertCoin)
-    }
-    selectItem() {
-      this.evaluate(VMActions.SelectItem)
-    }
-    authenticate() {
-      this.evaluate(VMActions.Authenticate)
-    }
-    complete() {
-      this.evaluate(VMActions.Complete)
-    }
-    cancel() {
-      this.evaluate(VMActions.Cancel)
-    }
+    abstract insertCoin(amount: number)
+    abstract selectItem(item: any)
+    abstract authenticate()
+    abstract complete()
+    abstract cancel()
 }

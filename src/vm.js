@@ -8,6 +8,7 @@ var model_1 = require("./model");
 var State = require("./states");
 var FSM = require("state.js");
 var _ = require("lodash");
+var util_1 = require("./util");
 (function (VMActions) {
     VMActions[VMActions["InsertCoin"] = 0] = "InsertCoin";
     VMActions[VMActions["SelectItem"] = 1] = "SelectItem";
@@ -18,7 +19,6 @@ var _ = require("lodash");
 var VMActions = exports.VMActions;
 var VMStateMachine = (function () {
     function VMStateMachine() {
-        this.setupStateMachine();
     }
     VMStateMachine.prototype.setupStateMachine = function () {
         this.setupStateMachineActions();
@@ -76,9 +76,9 @@ var VMStateMachine = (function () {
     return VMStateMachine;
 }());
 exports.VMStateMachine = VMStateMachine;
-var VM = (function (_super) {
-    __extends(VM, _super);
-    function VM(options) {
+var VMCore = (function (_super) {
+    __extends(VMCore, _super);
+    function VMCore(options) {
         if (options === void 0) { options = {}; }
         var _this = _super.call(this) || this;
         _this.defaults = {
@@ -86,35 +86,17 @@ var VM = (function (_super) {
         };
         _.defaultsDeep(options, _this.defaults);
         if (options.debug)
-            FSM.setConsole(console);
+            FSM.setConsole(util_1.logger);
+        _super.prototype.setupStateMachine.call(_this);
         return _this;
     }
-    Object.defineProperty(VM.prototype, "states", {
+    Object.defineProperty(VMCore.prototype, "states", {
         get: function () {
-            return {
-                idle: this.idle.state(),
-                active: this.active.state(),
-                service: this.service.state()
-            };
+            return { idle: this.idle, active: this.active, service: this.service };
         },
         enumerable: true,
         configurable: true
     });
-    VM.prototype.insertCoin = function () {
-        this.evaluate(VMActions.InsertCoin);
-    };
-    VM.prototype.selectItem = function () {
-        this.evaluate(VMActions.SelectItem);
-    };
-    VM.prototype.authenticate = function () {
-        this.evaluate(VMActions.Authenticate);
-    };
-    VM.prototype.complete = function () {
-        this.evaluate(VMActions.Complete);
-    };
-    VM.prototype.cancel = function () {
-        this.evaluate(VMActions.Cancel);
-    };
-    return VM;
+    return VMCore;
 }(VMStateMachine));
-exports.VM = VM;
+exports.VMCore = VMCore;

@@ -27,7 +27,7 @@ var VMOperationalState = (function (_super) {
         return _this;
     }
     VMOperationalState.prototype.setStates = function (model) {
-        var start = new FSM.PseudoState('vm-operational-state-start', model, FSM.PseudoStateKind.Initial), operational = new FSM.State('vm-operational-state-operational', model);
+        var start = new FSM.PseudoState('[operational].(start)', model, FSM.PseudoStateKind.Initial), operational = new FSM.State('[operational]', model);
         return { start: start, operational: operational };
     };
     Object.defineProperty(VMOperationalState.prototype, "name", {
@@ -52,7 +52,7 @@ var VMIdleState = (function (_super) {
         return _this;
     }
     VMIdleState.prototype.setStates = function (state) {
-        var start = new FSM.PseudoState('vm-idle-state-start', state, FSM.PseudoStateKind.Initial), idle = new FSM.State('vm-idle-state-idle', state);
+        var start = new FSM.PseudoState('[idle].(start)', state, FSM.PseudoStateKind.Initial), idle = new FSM.State('[idle]', state);
         return { start: start, idle: idle };
     };
     Object.defineProperty(VMIdleState.prototype, "name", {
@@ -77,7 +77,7 @@ var VMActiveState = (function (_super) {
         return _this;
     }
     VMActiveState.prototype.setStates = function (state) {
-        var active = new FSM.State('vm-active-state-active', state), coinInserted = new FSM.State('vm-active-state-coinInserted', active), itemSelected = new FSM.State('vm-active-state-itemSelected', active);
+        var active = new FSM.State('[active]', state), coinInserted = new FSM.State('(coinInserted)', active), itemSelected = new FSM.State('(itemSelected)', active);
         return { active: active, coinInserted: coinInserted, itemSelected: itemSelected };
     };
     Object.defineProperty(VMActiveState.prototype, "name", {
@@ -102,7 +102,7 @@ var VMServiceState = (function (_super) {
         return _this;
     }
     VMServiceState.prototype.setStates = function (state) {
-        var service = new FSM.State('vm-service-state-service', state);
+        var service = new FSM.State('(service)', state);
         return { service: service };
     };
     Object.defineProperty(VMServiceState.prototype, "name", {

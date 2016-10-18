@@ -8,7 +8,7 @@ var FSM = require("state.js");
 var VMModel = (function (_super) {
     __extends(VMModel, _super);
     function VMModel() {
-        return _super.call(this, 'vm-model') || this;
+        return _super.call(this, '[model]') || this;
     }
     return VMModel;
 }(FSM.StateMachine));

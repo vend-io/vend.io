@@ -16,7 +16,7 @@ import VMModel from './model';
 // |----------------------------------------------|
 
 abstract class State {
-  states: any
+  abstract states: any
   /**
    * Transitions a state to another state.
    * @param  {FSM.State   | string}      state The current state (self) or the initial state
@@ -35,14 +35,18 @@ abstract class State {
 
 export class VMOperationalState extends State {
   model: VMModel
+  states: {
+    start: FSM.PseudoState,
+    operational: FSM.State
+  }
   constructor(model: VMModel) {
     super()
     this.model = model
     this.states = this.setStates(model)
   }
   private setStates(model: FSM.StateMachine) {
-    const start = new FSM.PseudoState('vm-operational-state-start', model, FSM.PseudoStateKind.Initial), //check
-    operational = new FSM.State('vm-operational-state-operational', model);
+    const start = new FSM.PseudoState('[operational].(start)', model, FSM.PseudoStateKind.Initial), //check
+    operational = new FSM.State('[operational]', model);
     return { start, operational };
   }
   get name() : string {
@@ -54,13 +58,17 @@ export class VMOperationalState extends State {
 }
 
 export class VMIdleState extends State {
+  states: {
+    start: FSM.PseudoState,
+    idle: FSM.State
+  }
   constructor(state: VMOperationalState) {
     super()
     this.states = this.setStates(state.states.operational as FSM.State)
   }
   private setStates(state: FSM.State) {
-    const start = new FSM.PseudoState('vm-idle-state-start', state, FSM.PseudoStateKind.Initial), //check
-    idle = new FSM.State('vm-idle-state-idle', state);
+    const start = new FSM.PseudoState('[idle].(start)', state, FSM.PseudoStateKind.Initial), //check
+    idle = new FSM.State('[idle]', state);
     return { start, idle }
   }
   get name(): string {
@@ -73,14 +81,19 @@ export class VMIdleState extends State {
 
 
 export class VMActiveState extends State {
+  states: {
+    active: FSM.State,
+    coinInserted: FSM.State,
+    itemSelected: FSM.State
+  }
   constructor(state: VMOperationalState) {
     super()
     this.states = this.setStates(state.states.operational as FSM.State)
   }
   private setStates(state: FSM.State) {
-    const active = new FSM.State('vm-active-state-active', state), // check
-    coinInserted = new FSM.State('vm-active-state-coinInserted', active), // check
-    itemSelected = new FSM.State('vm-active-state-itemSelected', active); // check
+    const active = new FSM.State('[active]', state), // check
+    coinInserted = new FSM.State('(coinInserted)', active), // check
+    itemSelected = new FSM.State('(itemSelected)', active); // check
     return { active, coinInserted, itemSelected }
   }
   get name(): string {
@@ -92,12 +105,15 @@ export class VMActiveState extends State {
 }
 
 export class VMServiceState extends State {
+    states: {
+      service: FSM.State,
+    }
     constructor(state: VMOperationalState) {
       super()
       this.states = this.setStates(state.states.operational as FSM.State)
     }
     private setStates(state: FSM.State) {
-      const service = new FSM.State('vm-service-state-service', state);
+      const service = new FSM.State('(service)', state);
       return { service }
     }
     get name(): string {
