@@ -1,4 +1,4 @@
-import { VMActions, VMCore } from './src/vm'
+import { VMActions, VMCore } from './vm'
 import * as _ from 'lodash'
 import * as chalk from 'chalk';
 
@@ -50,7 +50,7 @@ export class VM extends VMCore {
 }
 
 
-const sodavm = new VM({ debug: false })
+const sodavm = new VM({ debug: true })
 //
 sodavm.insertCoin(0.25);
 sodavm.insertCoin(0.25);

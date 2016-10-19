@@ -13,7 +13,10 @@
         "removeComments": true,
         "noLib": false,
         "preserveConstEnums": true,
-        "suppressImplicitAnyIndexErrors": true
+        "suppressImplicitAnyIndexErrors": true,
+        "outDir": "lib/",
+        "rootDir": "src/",
+        "inlineSourceMap": true
     },
     "exclude": [
         "node_modules",
