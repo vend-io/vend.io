@@ -1,7 +1,7 @@
-import * as FSM from 'state.js'
+import * as FSM from 'state.js';
 
 export default class VMModel extends FSM.StateMachine {
   constructor() {
-    super('[model]')
+    super('[model]');
   }
 }

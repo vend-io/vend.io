@@ -1,115 +1,61 @@
-import VMModel from './model';
-import * as State from './states';
-import * as FSM from 'state.js';
+import { VMActions, VMCore } from './vm.core';
 import * as _ from 'lodash';
-import { logger } from './util';
+import * as chalk from 'chalk';
 
-///<reference types="./typings/node/node.d.ts" />
-// import { EventEmitter } from 'events';
-
-export enum VMActions {
-  InsertCoin,
-  SelectItem,
-  Authenticate,
-  Cancel,
-  Complete
-}
-
-export class VMStateMachine {
-  protected model: VMModel;
-  protected operational: State.VMOperationalState;
-  protected idle: State.VMIdleState;
-  protected active: State.VMActiveState;
-  protected service: State.VMServiceState;
-  protected instance: FSM.StateMachineInstance;
-  protected actions: { [x: number]: string }
-  protected setupStateMachine() {
-    this.setupStateMachineActions();
-    this.setupStateMachineStates()
-    this.setupStateMachineTransitions()
-    this.instance = new FSM.StateMachineInstance('vm');
-
-    FSM.validate(this.model)
-    /* initialise the state machine model and instance */
-    FSM.initialise(this.model, this.instance);
+const payload = {
+  'vendor': 'Sodalicious!',
+  'items': [{
+    'id': 1,
+    'name': 'Pepsi®',
+    'logo': 'http://www.pepsi.com/en-us/assets/images/logo.png',
+    'img': 'http://ncimages.pepsi.com/Zz00YjdlZjQxM2Y3OWY4OTc5ZWU2MDUyMmEyODQxNzZjMQ==?width=760',
+    'description': 'Some flavor that appeals to millions!'
   }
-  private setupStateMachineActions () {
-    this.actions = {
-      [VMActions.InsertCoin] : 'coinInserted',
-      [VMActions.SelectItem] : 'itemSelected',
-      [VMActions.Authenticate]: 'isAuthenticated',
-      [VMActions.Cancel]: 'canceled',
-      [VMActions.Complete]: 'completed'
-    };
-  }
-  private setupStateMachineStates() {
-      this.model = new VMModel();
-      this.operational = new State.VMOperationalState(this.model);
-      this.idle = new State.VMIdleState(this.operational);
-      this.active = new State.VMActiveState(this.operational)
-      this.service = new State.VMServiceState(this.operational)
-  }
-  private setupStateMachineTransitions() {
-    // Setup initial states
-    this.operational.transition('start', this.operational.name)
-    this.idle.transition('start', this.idle.name);
+  ]
+};
 
-    // Setup transition conditions
-    const coinInserted = s => s === this.actions[VMActions.InsertCoin]
-    const itemSelected = s => s === this.actions[VMActions.SelectItem]
-    const isAuthenticated = s => s === this.actions[VMActions.Authenticate]
-    const canceled = s => s === this.actions[VMActions.Cancel]
-    const completed = s => s === this.actions[VMActions.Complete]
-
-    // Transition from 'idle' state to 'active' state when coin is inserted
-    this.idle
-      .transition(this.active.state(this.actions[VMActions.InsertCoin]))
-      .when(coinInserted);
-    // Transition from 'idle' state to 'active' state when item is selected
-    this.idle
-      .transition(this.active.state(this.actions[VMActions.SelectItem]))
-      .when(itemSelected)
-    // Transition from 'idle' state to 'service' state when authenticated
-    this.idle
-      .transition(this.service.state())
-      .when(isAuthenticated);
-    // Transition from active state to idle state when state is canceled or completed
-    this.active
-      .transition(this.idle.state())
-      .when(s => canceled(s) || completed(s));
-    // Transition from serviec state to active state when state is canceled or completed
-    this.service
-      .transition(this.idle.state())
-      .when(s => canceled(s) || completed(s));
-
+export class VM extends VMCore {
+  private amount: number = 0.00;
+  private selectedItems: any[] = [];
+  insertCoin(amount: number) {
+    // Move to active state (coinInserted)
+    this.evaluate(VMActions.InsertCoin);
+    this.amount += amount;
   }
-  protected evaluate(action: VMActions) {
-    FSM.evaluate(this.model, this.instance, this.actions[action])
+  selectItem(item: any) {
+    // Move to active state (itemSelected)
+    this.evaluate(VMActions.SelectItem);
+    // Remove any duplicate items if it already exits (acts as toggle)
+    this.selectedItems.push(item);
+    this.selectedItems = _.uniqBy(this.selectedItems, 'id');
+  }
+  authenticate() {
+    // Move to service state
+    // TODO: Move to service state only if the maintainer is authenticated
+    this.evaluate(VMActions.Authenticate);
+  }
+  complete() {
+    // Move to idle state
+    this.evaluate(VMActions.Complete);
+  }
+  cancel() {
+    // Move to idle state
+    this.evaluate(VMActions.Cancel);
+    this.selectedItems = _.remove(this.selectedItems);
+    this.amount = 0.00;
+  }
+  getTotal(): number {
+    return this.amount;
   }
 }
 
 
-export abstract class VMCore extends VMStateMachine {
-    protected defaults = {
-      debug: false
-    };
-    // events: EventEmitter
-    constructor(options: any = {}) {
-      super()
-      // this.events = new EventEmitter();
-      _.defaultsDeep(options, this.defaults)
-      if (options.debug) FSM.setConsole(logger)
-      super.setupStateMachine()
-    }
-    protected get states (): ({
-      idle: State.VMIdleState,
-      active: State.VMActiveState,
-      service: State.VMServiceState }) {
-      return { idle: this.idle, active: this.active, service: this.service }
-    }
-    abstract insertCoin(amount: number)
-    abstract selectItem(item: any)
-    abstract authenticate()
-    abstract complete()
-    abstract cancel()
-}
+const sodavm = new VM({ debug: true });
+//
+sodavm.insertCoin(0.25);
+sodavm.insertCoin(0.25);
+sodavm.insertCoin(1.25);
+sodavm.insertCoin(1.25);
+sodavm.insertCoin(1.25);
+sodavm.complete();
+console.log(`${chalk.green('Total amount: ')} $${sodavm.getTotal()}`);
