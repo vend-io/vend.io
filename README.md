@@ -14,3 +14,17 @@ Machine does not yet exist.
 ```bash
 npm i && node index.js
 ```
+
+## Development Tools
+
+Code Editor:
+  * Visual Studio Code (recommended)
+  * Atom (supported)
+Code Editor Extensions:
+  * Linting
+    * TSLint (vscode)
+    * linter-tslint (atom)
+  * Editor Configuration
+    * editorconfig (vscode, atom)
+  * Syntax Highlighting
+    * atom-typescript (atom)
