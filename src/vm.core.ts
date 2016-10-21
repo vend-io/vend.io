@@ -4,9 +4,6 @@ import * as FSM from 'state.js';
 import * as _ from 'lodash';
 import { terminal } from './util';
 
-///<reference types="./typings/node/node.d.ts" />
-// import { EventEmitter } from 'events';
-
 export enum VMActions {
   InsertCoin,
   SelectItem,
@@ -112,7 +109,7 @@ export abstract class VMCore extends VMStateMachine {
   }
   abstract insertCoin(amount: number)
   abstract selectItem(item: any)
-  abstract authenticate()
+  abstract authenticate(callback: () => boolean)
   abstract complete()
   abstract cancel()
 }

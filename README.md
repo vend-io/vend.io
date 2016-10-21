@@ -17,6 +17,8 @@ npm i && node index.js
 
 ## Development Tools
 
+Node.js v6.9+
+
 Code Editor:
   * Visual Studio Code (recommended)
   * Atom (supported)

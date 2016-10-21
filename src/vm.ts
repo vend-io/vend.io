@@ -1,7 +1,7 @@
 import { VMActions, VMCore } from './vm.core';
 import * as _ from 'lodash';
 import * as chalk from 'chalk';
-
+import { EventEmitter } from 'events';
 const payload = {
   'vendor': 'Sodalicious!',
   'items': [{
@@ -14,9 +14,43 @@ const payload = {
   ]
 };
 
+
 export class VM extends VMCore {
-  private amount: number = 0.00;
-  private selectedItems: any[] = [];
+  private amount: number;
+  private selectedItems: any[];
+  private events: EventEmitter;
+  constructor(options?: any) {
+    super(options);
+    this.amount = 0.00;
+    this.selectedItems = [];
+    this.events = new EventEmitter();
+    this.setupStateMachineEvents();
+  }
+  private setupStateMachineEvents() {
+    const idle = this.states.idle,
+      active = this.states.active,
+      service = this.states.service;
+    idle.states.idle
+      .entry(message => this.events.emit('idle'))
+      .exit(message => this.events.emit('idle.exit'));
+    active.states.active
+      .entry(message => this.events.emit('active'))
+      .exit(message => this.events.emit('active.exit'));
+    service.states.service
+      .entry(message => this.events.emit('service'))
+      .exit(message => this.events.emit('service.exit'));
+
+    active.states.coinInserted
+      .entry(message => this.events.emit('coinInserted'))
+      .exit(message => this.events.emit('coinInserted.exit'));
+    active.states.itemSelected
+      .entry(message => this.events.emit('itemSelected'))
+      .exit(message => this.events.emit('itemSelected.exit'));
+  }
+  on(event: string, callback: Function): VM {
+    this.events.on(event, callback);
+    return this;
+  }
   insertCoin(amount: number) {
     // Move to active state (coinInserted)
     this.evaluate(VMActions.InsertCoin);
@@ -29,10 +63,11 @@ export class VM extends VMCore {
     this.selectedItems.push(item);
     this.selectedItems = _.uniqBy(this.selectedItems, 'id');
   }
-  authenticate() {
-    // Move to service state
-    // TODO: Move to service state only if the maintainer is authenticated
-    this.evaluate(VMActions.Authenticate);
+  authenticate(callback: () => boolean) {
+    if (callback()) {
+      // Move to service state
+      this.evaluate(VMActions.Authenticate);
+    }
   }
   complete() {
     // Move to idle state
@@ -51,7 +86,11 @@ export class VM extends VMCore {
 
 
 const sodavm = new VM({ debug: true });
-//
+
+sodavm
+  .on('coinInserted', () => console.log('COIN INSERTED!'))
+  .on('service', () => console.log('IN SERVICE MODE!'));
+
 sodavm.insertCoin(0.25);
 sodavm.insertCoin(0.25);
 sodavm.insertCoin(1.25);
@@ -59,3 +98,7 @@ sodavm.insertCoin(1.25);
 sodavm.insertCoin(1.25);
 sodavm.complete();
 console.log(`${chalk.green('Total amount: ')} $${sodavm.getTotal()}`);
+sodavm.authenticate(function (): boolean {
+  return true;
+});
+sodavm.complete();
