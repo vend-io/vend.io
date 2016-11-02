@@ -8,26 +8,26 @@ vm.inventory.addItem({
   cost: 1.00,
   quantity: 2
 });
-console.log(`Current state ${vm.state}`)
+console.log(`Current state: ${vm.state}`)
 
 vm.selectById('1');
 
-console.log(`Current state ${vm.state}`)
+console.log(`Current state: ${vm.state}`)
 
 vm.setPaymentMethod('cash');
 
 vm.pay(0.50);
-console.log(`paying ${vm.payment.value}`);
+console.log(`Paid (total): ${vm.payment.value}`);
 
-console.log(`Current state ${vm.state}`)
+console.log(`Current state: ${vm.state}`)
 
 vm.selectById('1');
 
-console.log(`Current state ${vm.state}`)
+console.log(`Current state: ${vm.state}`)
 
 vm.pay(0.50);
-console.log(`paying ${vm.payment.value}`);
+console.log(`Paid (total): ${vm.payment.value}`);
 
 vm.selectById('1');
 
-console.log(`Current state ${vm.state}`)
+console.log(`Current state: ${vm.state}`)
