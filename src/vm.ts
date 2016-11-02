@@ -1,104 +1,52 @@
-import { VMActions, VMCore } from './vm.core';
-import * as _ from 'lodash';
-import * as chalk from 'chalk';
-import { EventEmitter } from 'events';
-const payload = {
-  'vendor': 'Sodalicious!',
-  'items': [{
-    'id': 1,
-    'name': 'Pepsi®',
-    'logo': 'http://www.pepsi.com/en-us/assets/images/logo.png',
-    'img': 'http://ncimages.pepsi.com/Zz00YjdlZjQxM2Y3OWY4OTc5ZWU2MDUyMmEyODQxNzZjMQ==?width=760',
-    'description': 'Some flavor that appeals to millions!'
-  }
-  ]
-};
+import { State, InitialState, HasMoneyState, HasSelectedState } from './state';
+import Inventory from './inventory';
+import Selection from './selection';
+import { Payment, Cash, Card } from './payment';
+import * as FS from 'fs';
+import * as Path from 'path';
 
+const configurationFile = FS.readFileSync(`${Path.resolve(__dirname, '../')}/vmconfig.json`, 'utf8');
+const options = JSON.parse(require('strip-json-comments')(configurationFile));
 
-export class VM extends VMCore {
-  private amount: number;
-  private selectedItems: any[];
-  private events: EventEmitter;
-  constructor(options?: any) {
-    super(options);
-    this.amount = 0.00;
-    this.selectedItems = [];
-    this.events = new EventEmitter();
-    this.setupStateMachineEvents();
+export class VM {
+  inventory: Inventory;
+  payment: Payment;
+  selection: Selection;
+  options: any = options;
+  private _current: State;
+  private _initialState: InitialState;
+  private _hasMoneyState: HasMoneyState;
+  private _hasSelectedState: HasSelectedState;
+  constructor() {
+    this._initialState = new InitialState(this);
+    this._hasMoneyState = new HasMoneyState(this);
+    this._hasSelectedState = new HasSelectedState(this);
+    this._current = this._initialState;
+    this.payment = new Payment();
+    this.inventory = new Inventory();
+    this.selection = new Selection();
   }
-  private setupStateMachineEvents() {
-    const idle = this.states.idle,
-      active = this.states.active,
-      service = this.states.service;
-    idle.states.idle
-      .entry(message => this.events.emit('idle'))
-      .exit(message => this.events.emit('idle.exit'));
-    active.states.active
-      .entry(message => this.events.emit('active'))
-      .exit(message => this.events.emit('active.exit'));
-    service.states.service
-      .entry(message => this.events.emit('service'))
-      .exit(message => this.events.emit('service.exit'));
+  // Operations
+  selectById(id: string) { this._current.selectById(id); }
+  pay(amount: number) { this._current.pay(amount); }
+  cancel() { this._current.cancel(); }
 
-    active.states.coinInserted
-      .entry(message => this.events.emit('coinInserted'))
-      .exit(message => this.events.emit('coinInserted.exit'));
-    active.states.itemSelected
-      .entry(message => this.events.emit('itemSelected'))
-      .exit(message => this.events.emit('itemSelected.exit'));
-  }
-  on(event: string, callback: Function): VM {
-    this.events.on(event, callback);
-    return this;
-  }
-  insertCoin(amount: number) {
-    // Move to active state (coinInserted)
-    this.evaluate(VMActions.InsertCoin);
-    this.amount += amount;
-  }
-  selectItem(item: any) {
-    // Move to active state (itemSelected)
-    this.evaluate(VMActions.SelectItem);
-    // Remove any duplicate items if it already exits (acts as toggle)
-    this.selectedItems.push(item);
-    this.selectedItems = _.uniqBy(this.selectedItems, 'id');
-  }
-  authenticate(callback: () => boolean) {
-    if (callback()) {
-      // Move to service state
-      this.evaluate(VMActions.Authenticate);
+  setPaymentMethod(method: string, details?: { name: string, cardNumber: number, expiry: Date }) {
+    switch (method) {
+      case 'cash': this.payment.method = new Cash(); break;
+      case 'card': this.payment.method = new Card(details.name, details.cardNumber, details.expiry); break;
     }
   }
-  complete() {
-    // Move to idle state
-    this.evaluate(VMActions.Complete);
+
+  set state(state: string) {
+    switch (state.toLowerCase().replace('state', '')) {
+      case 'initial': this._current = this._initialState; break;
+      case 'hasmoney': this._current = this._hasMoneyState; break;
+      case 'hasselected': this._current = this._hasSelectedState; break;
+      default: break;
+    }
   }
-  cancel() {
-    // Move to idle state
-    this.evaluate(VMActions.Cancel);
-    this.selectedItems = _.remove(this.selectedItems);
-    this.amount = 0.00;
-  }
-  getTotal(): number {
-    return this.amount;
-  }
+
+  get state() { return this._current.name; }
+
 }
-
-
-const sodavm = new VM({ debug: true });
-
-sodavm
-  .on('coinInserted', () => console.log('COIN INSERTED!'))
-  .on('service', () => console.log('IN SERVICE MODE!'));
-
-sodavm.insertCoin(0.25);
-sodavm.insertCoin(0.25);
-sodavm.insertCoin(1.25);
-sodavm.insertCoin(1.25);
-sodavm.insertCoin(1.25);
-sodavm.complete();
-console.log(`${chalk.green('Total amount: ')} $${sodavm.getTotal()}`);
-sodavm.authenticate(function (): boolean {
-  return true;
-});
-sodavm.complete();

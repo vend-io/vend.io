@@ -1,0 +1,36 @@
+{
+  "vendor": {
+    "name": "vend.io",
+    "image": "",
+    "inventory": []
+  },
+  "selection": {
+    "type": "single"
+  },
+  // Configure the display for items.
+  "display": {
+    // Determines whether touch is enabled.
+    //"touchEnabled": false, (out of scope)
+    // Configures the number of rows in the display.
+    "rows": 1,
+    // Configures the number of rows in the display.
+    "columns": 2
+  },
+  "payment": {
+    // Configures the accepted methods of payment.
+    "methods": [
+      "coin"
+      //"cash",
+      //"card",
+      //"nfc"
+    ],
+    // Configures the accepted currency for payment.
+    "currency": {
+      "default": "US",
+      "accepted": [
+        "US",
+        "JPY"
+      ]
+    }
+  }
+}
