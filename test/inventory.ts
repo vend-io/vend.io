@@ -36,19 +36,19 @@ describe('Inventory', () => {
     });
 
     it('should determine that an item is not stock', () => {
-      inventory.findItemById('1').setQuantity(0);
+      inventory.findItemById('1').quantity = 0;
       assert.isFalse(inventory.isAvailableById('1'));
     });
   });
 
   describe('isAvailableByName()', () => {
     it('should determine that an item is in stock', () => {
-      inventory.findItemByName('Fanta Orange').setQuantity(1);
+      inventory.findItemByName('Fanta Orange').quantity = 1;
       assert.isTrue(inventory.isAvailableByName('Fanta Orange'));
     });
 
     it('should determine that an item is not stock', () => {
-      inventory.findItemByName('Fanta Orange').setQuantity(0);
+      inventory.findItemByName('Fanta Orange').quantity = 0;
       assert.isFalse(inventory.isAvailableByName('Fanta Orange'));
     });
   });
@@ -56,14 +56,14 @@ describe('Inventory', () => {
   describe('isAvailableByItems()', () => {
     it('should determine that all of the specified items are in stock', () => {
       const pepsi = new Item('2', 'Pepsi', 2.00, 2);
-      inventory.findItemById('1').setQuantity(1);
+      inventory.findItemById('1').quantity = 1;
       inventory.addItem(pepsi);
       assert.isTrue(inventory.isAvailableByItems([item, pepsi]));
     });
 
     it('should determine that at least one of the specified items are not stock', () => {
       const pepsi = new Item('2', 'Pepsi', 2.00, 2);
-      inventory.findItemById('1').setQuantity(1);
+      inventory.findItemById('1').quantity = 1;
       inventory.addItem(pepsi);
       assert.isTrue(inventory.isAvailableByItems([item, pepsi]));
     });
