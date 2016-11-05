@@ -3,4 +3,5 @@ node_js:
   - 6
   - 7
 
-before_install: npm i -g mocha ts-node && npm test
+before_install:
+  - npm i -g mocha ts-node
