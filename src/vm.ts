@@ -2,6 +2,7 @@ import State from './state';
 import Inventory from './inventory';
 import Selection from './selection';
 import Payment from './payment';
+import { OptionSchema } from './schema';
 import * as FS from 'fs';
 import * as Path from 'path';
 
@@ -12,7 +13,7 @@ export class VM {
   inventory: Inventory;
   payment: Payment;
   selection: Selection;
-  options: any = options;
+  options: OptionSchema = options;
   state: State;
   constructor() {
     this.payment = new Payment();

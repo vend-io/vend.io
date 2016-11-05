@@ -1,14 +1,9 @@
 {
-  "vendor": {
-    "name": "vend.io",
-    "image": "",
-    "inventory": []
-  },
   "selection": {
     "type": "single"
   },
   // Configure the display for items.
-  "display": {
+  "ui": {
     // Determines whether touch is enabled.
     //"touchEnabled": false, (out of scope)
     // Configures the number of rows in the display.
