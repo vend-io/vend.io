@@ -1,11 +1,11 @@
-export interface PaymentMethod {
+export interface IPaymentMethod {
   type: string;
   amount: number;
   pay(amount: number): boolean;
   process();
 }
 
-export class Card implements PaymentMethod {
+export class Card implements IPaymentMethod {
   private _name: string;
   private _cardNumber: number;
   private _expiry: Date;
@@ -27,7 +27,7 @@ export class Card implements PaymentMethod {
 
 }
 
-export class Cash implements PaymentMethod {
+export class Cash implements IPaymentMethod {
   private _amount: number = 0;
   pay(amount: number): boolean {
     if (this._amount !== 0) {
@@ -41,16 +41,16 @@ export class Cash implements PaymentMethod {
   get amount(): number { return this._amount; }
 }
 
-export class Payment {
-  private _method: PaymentMethod;
+export default class Payment {
+  private _method: IPaymentMethod;
   pay(amount: number): boolean { return this._method.pay(amount); }
   isCash(): boolean { return this._method.type === 'cash'; }
   isCard(): boolean { return this._method.type === 'card'; }
   isNFC(): boolean { return this._method.type === 'nfc'; }
   cancel() { this._method.amount = 0; };
   process(): boolean { return this._method.process(); }
-  set method(method: PaymentMethod) { this._method = method; }
-  get method(): PaymentMethod { return this._method; }
+  set method(method: IPaymentMethod) { this._method = method; }
+  get method(): IPaymentMethod { return this._method; }
   get type(): string { return this._method.type; }
   get value(): number { return this._method.amount; }
 }

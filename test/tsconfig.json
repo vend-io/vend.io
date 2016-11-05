@@ -14,8 +14,6 @@
     "noLib": false,
     "preserveConstEnums": true,
     "suppressImplicitAnyIndexErrors": true,
-    "outDir": "lib/",
-    "rootDir": "src/",
     "inlineSourceMap": true,
     "watch": true
   },
@@ -23,8 +21,7 @@
     "node_modules",
     "typings/browser",
     "typings/browser.d.ts",
-    "example",
-    "test"
+    "example"
   ],
   "compileOnSave": true,
   "buildOnSave": true,

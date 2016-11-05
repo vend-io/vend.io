@@ -1,9 +1,6 @@
 import { VM } from './vm';
 
-/**
- * VMState
- */
-export interface State {
+export interface IState {
   name: string;
   // TODO: selectItemByName(name: string);
   selectById(id: string);
@@ -11,7 +8,39 @@ export interface State {
   cancel();
 }
 
-export class InitialState implements State {
+export enum States {
+  IdleState,
+  HasMoneyState,
+  HasSelectedState,
+}
+
+export default class State implements IState {
+  private _current: IState;
+  private _idleState: IdleState;
+  private _hasMoneyState: HasMoneyState;
+  private _hasSelectedState: HasSelectedState;
+  constructor(machine: VM) {
+    this._idleState = new IdleState(machine);
+    this._hasMoneyState = new HasMoneyState(machine);
+    this._hasSelectedState = new HasSelectedState(machine);
+    this._current = this._idleState;
+  }
+  transitionTo(state: States) {
+    switch (state) {
+      case States.IdleState: this._current = this._idleState; break;
+      case States.HasMoneyState: this._current = this._hasMoneyState; break;
+      case States.HasSelectedState: this._current = this._hasSelectedState; break;
+      default: break;
+    }
+  }
+
+  selectById(id: string) { return this._current.selectById(id); }
+  pay(amount: number) { this._current.pay(amount); }
+  cancel() { this._current.cancel(); }
+  get name(): string { return this._current.name; }
+}
+
+export class IdleState implements IState {
   machine: VM;
   constructor(machine: VM) { this.machine = machine; }
   selectById(id: string) {
@@ -38,7 +67,7 @@ export class InitialState implements State {
         // Store the initial item.
         selection.addItem(inventory.findItemById(id));
         // Transition to HasSelectedState.
-        this.machine.state = HasSelectedState.name;
+        this.machine.state.transitionTo(States.HasSelectedState);
       }
     }
   }
@@ -55,7 +84,7 @@ export class InitialState implements State {
     // Validate the payment.
     if (payment.pay(amount)) {
       // Transition to HasCashState.
-      this.machine.state = HasMoneyState.name;
+      this.machine.state.transitionTo(States.HasMoneyState);
     } else {
       // Notify the consumer if the payment method failed.
       console.log('Please use an alternative form of payment.');
@@ -76,11 +105,10 @@ export class InitialState implements State {
       payment.cancel();
     }
   }
-  get name(): string { return 'InitialState'; }
-  static get name(): string { return 'InitialState'; }
+  get name(): string { return 'IdleState'; }
 }
 
-export class HasMoneyState implements State {
+export class HasMoneyState implements IState {
   machine: VM;
   constructor(machine: VM) { this.machine = machine; }
   selectById(id: string) {
@@ -122,14 +150,14 @@ export class HasMoneyState implements State {
         console.log('Enjoy your product! Have a nice day.');
         // TODO: Implement a driver for the item dispenser.
       } else { console.log('Please use an alternative form of payment.'); }
-      this.machine.state = InitialState.name;
+      this.machine.state.transitionTo(States.IdleState);
       // Clear the selection.
       selection.clear();
     } else {
       if (this.machine.options.selection.type === 'single') {
         selection.clear();
       }
-      this.machine.state = HasMoneyState.name;
+      this.machine.state.transitionTo(States.HasMoneyState);
     }
 
   }
@@ -163,10 +191,9 @@ export class HasMoneyState implements State {
     }
   }
   get name(): string { return 'HasMoneyState'; }
-  static get name(): string { return 'HasMoneyState'; }
 }
 
-export class HasSelectedState implements State {
+export class HasSelectedState implements IState {
   machine: VM;
   constructor(machine: VM) { this.machine = machine; }
   selectById(id: string) {
@@ -200,7 +227,7 @@ export class HasSelectedState implements State {
     // Validate the payment.
     if (payment.pay(amount)) {
       // Transition to HasCashState.
-      this.machine.state = HasMoneyState.name;
+      this.machine.state.transitionTo(States.HasMoneyState);
     } else {
       // Notify the consumer if the payment method failed.
       console.log('Please use an alternative form of payment.');
@@ -222,5 +249,4 @@ export class HasSelectedState implements State {
     selection.clear();
   }
   get name(): string { return 'HasSelectedState'; }
-  static get name(): string { return 'HasSelectedState'; }
 }

@@ -1,0 +1,46 @@
+{
+  "sessions": [
+    {
+      "id": "476f73ba-261a-43ad-9ca5-ad3b072233af",
+      "tabLayout": {
+        "type": "stack",
+        "width": 100,
+        "height": 100,
+        "tabs": [
+          {
+            "id": "0ab2d7c0-e12b-4e44-b6ea-be4125d917c5",
+            "relativeUrl": "documentation://./Documentation",
+            "additionalData": null
+          },
+          {
+            "id": "ae232949-88ff-4e3d-883c-4b4dede6748b",
+            "relativeUrl": "file://./src/state.ts",
+            "additionalData": null
+          },
+          {
+            "id": "d4208d34-a45a-4811-b3e4-8e954acf5feb",
+            "relativeUrl": "uml://./src/state.ts",
+            "additionalData": null
+          },
+          {
+            "id": "f4a21919-19b9-4f08-a8d8-51594425026b",
+            "relativeUrl": "file://./src/selection.ts",
+            "additionalData": null
+          },
+          {
+            "id": "38d1086e-1efc-40b2-b767-58372442d509",
+            "relativeUrl": "uml://./src/selection.ts",
+            "additionalData": null
+          }
+        ],
+        "subItems": [],
+        "activeItemIndex": 0
+      },
+      "lastUsed": 1478317578455,
+      "selectedTabId": "0ab2d7c0-e12b-4e44-b6ea-be4125d917c5",
+      "errorsExpanded": true,
+      "mainPanelHeight": 102
+    }
+  ],
+  "relativePathToTsconfig": "./tsconfig.json"
+}

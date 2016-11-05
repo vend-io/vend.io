@@ -1,7 +1,7 @@
-import { State, InitialState, HasMoneyState, HasSelectedState } from './state';
+import State from './state';
 import Inventory from './inventory';
 import Selection from './selection';
-import { Payment, Cash, Card } from './payment';
+import Payment from './payment';
 import * as FS from 'fs';
 import * as Path from 'path';
 
@@ -13,40 +13,16 @@ export class VM {
   payment: Payment;
   selection: Selection;
   options: any = options;
-  private _current: State;
-  private _initialState: InitialState;
-  private _hasMoneyState: HasMoneyState;
-  private _hasSelectedState: HasSelectedState;
+  state: State;
   constructor() {
-    this._initialState = new InitialState(this);
-    this._hasMoneyState = new HasMoneyState(this);
-    this._hasSelectedState = new HasSelectedState(this);
-    this._current = this._initialState;
     this.payment = new Payment();
     this.inventory = new Inventory();
     this.selection = new Selection();
+    this.state = new State(this);
   }
   // Operations
-  selectById(id: string) { this._current.selectById(id); }
-  pay(amount: number) { this._current.pay(amount); }
-  cancel() { this._current.cancel(); }
-
-  setPaymentMethod(method: string, details?: { name: string, cardNumber: number, expiry: Date }) {
-    switch (method) {
-      case 'cash': this.payment.method = new Cash(); break;
-      case 'card': this.payment.method = new Card(details.name, details.cardNumber, details.expiry); break;
-    }
-  }
-
-  set state(state: string) {
-    switch (state.toLowerCase().replace('state', '')) {
-      case 'initial': this._current = this._initialState; break;
-      case 'hasmoney': this._current = this._hasMoneyState; break;
-      case 'hasselected': this._current = this._hasSelectedState; break;
-      default: break;
-    }
-  }
-
-  get state() { return this._current.name; }
+  selectById(id: string) { this.state.selectById(id); }
+  pay(amount: number) { this.state.pay(amount); }
+  cancel() { this.state.cancel(); }
 
 }

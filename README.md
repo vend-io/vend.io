@@ -1,13 +1,12 @@
 # vend.io
 
-An open source framework for vending machines.  
+An open source framework for vending machines (work in progress).
 
-Proposed features: support for multiple currencies, notification when stock reaches half, support for at least one beverage.
+[![Build Status](https://travis-ci.org/vend-io/vend.io.svg?branch=master)](https://travis-ci.org/vend-io/vend.io)
 
-Known bugs
-----------
 
-Machine does not yet exist.
+Proposed features: support for multiple currencies, notification when stock reaches half, support for at least one item.
+
 
 ## Usage
 
@@ -22,6 +21,7 @@ Node.js v6.9+
 Code Editor:
   * Visual Studio Code (recommended)
   * Atom (supported)
+
 Code Editor Extensions:
   * Linting
     * TSLint (vscode)
