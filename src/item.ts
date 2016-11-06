@@ -1,10 +1,9 @@
-import { VendorSchema, ItemSchema } from './schema';
+import { VendorSchema, ItemSchema, IJSON } from './schema';
 
-class Vendor {
+class Vendor implements IJSON {
   name: string;
   imageURL: string = null;
-
-  // Operations
+  /** Represents a vendor as JSON */
   toJSON(): VendorSchema {
     return {
       name: this.name,
@@ -15,7 +14,7 @@ class Vendor {
 /**
  * Item
  */
-export default class Item {
+export default class Item implements IJSON {
   // Attributes
   id: string;
   name: string;
@@ -31,12 +30,13 @@ export default class Item {
     this.cost = cost;
     this.quantity = quantity;
   }
-
-  // Operations
+  /** Represents an item as JSON */
   toJSON(): ItemSchema {
     return {
       id: this.id,
       name: this.name,
+      cost: this.cost,
+      quantity: this.quantity,
       vendor: this.vendor.toJSON(),
       image: { url: this.imageURL },
       dataMatrixImage: { url: this.dataMatrixImageURL }
