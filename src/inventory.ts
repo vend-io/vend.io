@@ -6,8 +6,10 @@ export default class Inventory {
   private _items: Item[] = [];
   /** Adds an item to the inventory */
   addItem(item: Item): Inventory { this._items.push(item); return this; }
-  /** Removes an item from the inventory */
-  removeItem(id: string): Inventory { _.remove(this._items, i => i.id === id); return this; }
+  /** Removes an item from the inventory by id */
+  removeItemById(id: string): Inventory { _.remove(this._items, i => i.id === id); return this; }
+  /** Removes an item from the inventory by name */
+  removeItemByName(name: string): Inventory { _.remove(this._items, i => i.name === name); return this; }
   /** Finds an item by id */
   findItemById(id: string): Item { return this._items.filter(i => i.id === id)[0]; }
   /** Finds an item by name */
