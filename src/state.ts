@@ -1,7 +1,8 @@
-import { VM } from './vm';
+import { Core } from './core';
 
 export interface IState {
   name: string;
+  machine?: Core;
   // TODO: selectItemByName(name: string);
   selectById(id: string);
   pay(amount: number);
@@ -19,18 +20,17 @@ export default class State implements IState {
   private _idleState: IdleState;
   private _hasMoneyState: HasMoneyState;
   private _hasSelectedState: HasSelectedState;
-  constructor(machine: VM) {
+  constructor(machine: Core) {
     this._idleState = new IdleState(machine);
     this._hasMoneyState = new HasMoneyState(machine);
     this._hasSelectedState = new HasSelectedState(machine);
-    this._current = this._idleState;
+    this.transitionTo(States.IdleState);
   }
   transitionTo(state: States) {
     switch (state) {
       case States.IdleState: this._current = this._idleState; break;
       case States.HasMoneyState: this._current = this._hasMoneyState; break;
       case States.HasSelectedState: this._current = this._hasSelectedState; break;
-      default: break;
     }
   }
 
@@ -41,8 +41,8 @@ export default class State implements IState {
 }
 
 export class IdleState implements IState {
-  machine: VM;
-  constructor(machine: VM) { this.machine = machine; }
+  machine: Core;
+  constructor(machine: Core) { this.machine = machine; }
   selectById(id: string) {
     /*
       Use Case: The consumer selects an item.
@@ -109,8 +109,8 @@ export class IdleState implements IState {
 }
 
 export class HasMoneyState implements IState {
-  machine: VM;
-  constructor(machine: VM) { this.machine = machine; }
+  machine: Core;
+  constructor(machine: Core) { this.machine = machine; }
   selectById(id: string) {
     /*
       Use Case: The consumer selects an item.
@@ -194,8 +194,8 @@ export class HasMoneyState implements IState {
 }
 
 export class HasSelectedState implements IState {
-  machine: VM;
-  constructor(machine: VM) { this.machine = machine; }
+  machine: Core;
+  constructor(machine: Core) { this.machine = machine; }
   selectById(id: string) {
     /*
       Use Case: The consumer selects one or more items.
