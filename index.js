@@ -1,4 +1,4 @@
-const { VM } = require('./lib/vm');
+const { VM } = require('./lib/core');
 const { Cash } = require('./lib/payment');
 const Item = require('./lib/item').default;
 

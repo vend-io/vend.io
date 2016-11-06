@@ -9,7 +9,7 @@ import * as Path from 'path';
 const configurationFile = FS.readFileSync(`${Path.resolve(__dirname, '../')}/vmconfig.json`, 'utf8');
 const options = JSON.parse(require('strip-json-comments')(configurationFile));
 
-export class VM {
+export class Core {
   inventory: Inventory;
   payment: Payment;
   selection: Selection;

@@ -4,6 +4,7 @@ import * as _ from 'lodash';
 export default class Inventory {
   /** Stores the items and performs operations on it */
   private _items: Item[] = [];
+
   /** Adds an item to the inventory */
   addItem(item: Item): Inventory { this._items.push(item); return this; }
   /** Removes an item from the inventory by id */
@@ -24,6 +25,7 @@ export default class Inventory {
   isAvailableByName(name: string): boolean { return this.findItemByName(name).quantity > 0; }
   /** Clears the inventory */
   clear() { this._items = []; }
+
   /** A list of the items in inventory */
   get list(): Item[] { return this._items; }
 }
