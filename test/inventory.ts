@@ -13,20 +13,27 @@ describe('Inventory', () => {
   });
 
   describe('findItemById()', () => {
-    it('should find an item', () => {
+    it('should find an item by id', () => {
       assert.deepEqual(inventory.findItemById('1'), item);
     });
   });
 
   describe('findItemByName()', () => {
-    it('should find an item', () => {
+    it('should find an item by name', () => {
       assert.deepEqual(inventory.findItemByName('Fanta Orange'), item);
     });
   });
 
-  describe('removeItem()', () => {
-    it('should remove an item', () => {
-      assert.lengthOf(inventory.removeItem('1').list, 0);
+  describe('removeItemId()', () => {
+    it('should remove an item by id', () => {
+      assert.lengthOf(inventory.removeItemById('1').list, 0);
+    });
+  });
+
+  describe('removeItemName()', () => {
+    it('should remove an item by name', () => {
+      inventory.addItem(item);
+      assert.lengthOf(inventory.removeItemByName('Fanta Orange').list, 0);
     });
   });
 
@@ -40,6 +47,7 @@ describe('Inventory', () => {
       assert.isFalse(inventory.isAvailableById('1'));
     });
   });
+
 
   describe('isAvailableByName()', () => {
     it('should determine that an item is in stock', () => {
