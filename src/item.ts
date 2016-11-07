@@ -11,9 +11,7 @@ class Vendor implements IJSON {
     };
   }
 }
-/**
- * Item
- */
+/** Represents an Item that stores its attributes. */
 export default class Item implements IJSON {
   // Attributes
   id: string;
