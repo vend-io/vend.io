@@ -22,8 +22,16 @@ export class Core {
     this.state = new State(this);
   }
   // Operations
+  /**
+   * Selects an item in inventory by id
+   * @param {string} id The id of the item to select
+   */
   selectById(id: string) { this.state.selectById(id); }
+  /**
+   * Starts a transaction
+   * @param {number} amount The amount to pay for the item
+   */
   pay(amount: number) { this.state.pay(amount); }
+  /** Cancels the current action */
   cancel() { this.state.cancel(); }
-
 }

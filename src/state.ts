@@ -8,7 +8,7 @@ export interface IState {
   pay(amount: number);
   cancel();
 }
-
+/** An enumeration representing the states */
 export enum States {
   IdleState,
   HasMoneyState,
@@ -26,6 +26,10 @@ export default class State implements IState {
     this._hasSelectedState = new HasSelectedState(machine);
     this.transitionTo(States.IdleState);
   }
+  /**
+   * Transitions the current state to another state
+   * @param {States} state The state to transition to
+   */
   transitionTo(state: States) {
     switch (state) {
       case States.IdleState: this._current = this._idleState; break;

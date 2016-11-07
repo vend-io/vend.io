@@ -79,6 +79,10 @@ export default class Payment {
   /** Determines if the current payment method is cash */
   isCash(): boolean { return this.method.type === 'cash'; }
   // isNFC(): boolean { return this.method.type === 'nfc'; }
+  /**
+  * Starts a transaction
+  * @param {number} amount The amount to pay
+  */
   pay(amount: number): boolean { return this.method.pay(amount); }
   /** Processes the transaction */
   process(): boolean { return this.method.process(); }
