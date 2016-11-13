@@ -1,5 +1,4 @@
-import Payment from '../src/payment';
-import { Cash, Card } from '../src/payment';
+import Payment, { Cash, Card } from '../src/payment';
 import { assert } from 'chai';
 
 describe('Payment', () => {
@@ -9,12 +8,12 @@ describe('Payment', () => {
   describe('pay()', () => {
     it('should start a transaction', () => {
       const value = 0.50;
+      // Card payment
       payment.method = card;
-
       assert.isTrue(payment.pay(value));
 
+      // Cash payment
       payment.method = cash;
-
       assert.isTrue(payment.pay(value));
 
       assert.equal(payment.value, value);

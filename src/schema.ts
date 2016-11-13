@@ -7,6 +7,7 @@ export interface Schema { }
 
 /** A JSON schema for Option */
 export interface OptionSchema extends Schema {
+  debug: boolean;
   selection: SelectionSchema;
   ui: UISchema;
   payment: PaymentSchema;

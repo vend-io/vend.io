@@ -56,17 +56,17 @@ export class IdleState implements IState {
         - Notify the consumer the cost of the selected item.
         - Store the initial item and transition to HasSelectedState (if selection type is 'multiple').
     */
-    const { inventory, selection } = this.machine;
+    const { inventory, selection, options } = this.machine;
     // Notify the consumer if the selected item is sold out.
     if (!inventory.isAvailableById(id)) {
       // TODO: Implement the observer pattern.
-      console.log(`${inventory.findItemById(id).name} is not available.`);
+      if (options.debug) { console.log(`${inventory.findItemById(id).name} is not available.`); }
     } else {
       // Check whether multiple selection is enabled.
       if (this.machine.options.selection.type === 'single') {
         // Notify the consumer the cost of the selected item.
         // TODO: Implement the observer pattern.
-        console.log(`Cost of ${inventory.findItemById(id).name} is ${inventory.findItemById(id).cost}`);
+        if (options.debug) { console.log(`Cost of ${inventory.findItemById(id).name} is ${inventory.findItemById(id).cost}`); }
       } else {
         // Store the initial item.
         selection.addItem(inventory.findItemById(id));
@@ -84,14 +84,14 @@ export class IdleState implements IState {
         - Transition to HasCashState
         - Notify the consumer if the payment method failed.
     */
-    const { payment } = this.machine;
+    const { payment, options } = this.machine;
     // Validate the payment.
     if (payment.pay(amount)) {
       // Transition to HasCashState.
       this.machine.state.transitionTo(States.HasMoneyState);
     } else {
       // Notify the consumer if the payment method failed.
-      console.log('Please use an alternative form of payment.');
+      if (options) { console.log('Please use an alternative form of payment.'); }
     }
   }
 
@@ -126,11 +126,11 @@ export class HasMoneyState implements IState {
         - Transition to initial state if item is dispensed.
         - Transition to HasSelectedState if multiple selection is enabled.
     */
-    const { inventory, payment, selection } = this.machine;
+    const { inventory, payment, selection, options } = this.machine;
     // Notify the consumer if the selected item is sold out.
     // TODO: Observer pattern.
     if (!inventory.isAvailableById(id)) {
-      console.log(`${inventory.findItemById(id).name} is not available.`);
+      if (options.debug) { console.log(`${inventory.findItemById(id).name} is not available.`); }
     } else {
       // Determine whether multiple selection is enabled.
       if (this.machine.options.selection.type === 'single') {
@@ -148,12 +148,12 @@ export class HasMoneyState implements IState {
       if (success) {
         if (payment.value > selection.value) {
           // TODO: Implement a driver for cash dispenser.
-          console.log(`Returning change of ${paymentValue}`);
+          if (options.debug) { console.log(`Returning change of ${paymentValue}`); }
         }
         // Notify the consumer.
-        console.log('Enjoy your product! Have a nice day.');
+        if (options.debug) { console.log('Enjoy your product! Have a nice day.'); }
         // TODO: Implement a driver for the item dispenser.
-      } else { console.log('Please use an alternative form of payment.'); }
+      } else { if (options.debug) { console.log('Please use an alternative form of payment.'); } }
       this.machine.state.transitionTo(States.IdleState);
       // Clear the selection.
       selection.clear();
@@ -208,11 +208,11 @@ export class HasSelectedState implements IState {
         - Notify the consumer if the selected item is sold out.
         - Store the items.
     */
-    const { inventory, selection } = this.machine;
+    const { inventory, selection, options } = this.machine;
     // Notify the consumer if the selected item is sold out.
     // TODO: Observer pattern.
     if (!inventory.isAvailableById(id)) {
-      console.log(`${inventory.findItemById(id).name} is not available.`);
+      if (options.debug) { console.log(`${inventory.findItemById(id).name} is not available.`); }
     } else {
       // Store the initial item.
       selection.addItem(inventory.findItemById(id));
