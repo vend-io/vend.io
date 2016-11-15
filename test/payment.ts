@@ -5,9 +5,9 @@ describe('Payment', () => {
   const payment = new Payment();
   const cash = new Cash();
   const card = new Card('John N. Doe', 123456789, new Date());
+  const value = 0.50;
   describe('pay()', () => {
     it('should start a transaction', () => {
-      const value = 0.50;
       // Card payment
       payment.method = card;
       assert.isTrue(payment.pay(value));
@@ -22,7 +22,12 @@ describe('Payment', () => {
 
   describe('process()', () => {
     it('should process the transaction', () => {
-      assert.isTrue(payment.process());
+      payment.method = cash;
+      assert.isTrue(payment.process(value));
+      assert.equal(payment.change, 0);
+      payment.pay(value);
+      payment.process(value / 2);
+      assert.equal(payment.change, value / 2);
     });
   });
 });

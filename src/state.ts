@@ -139,16 +139,14 @@ export class HasMoneyState implements IState {
       }
     }
 
-    let success: boolean = false;
-    const paymentValue: number = payment.value;
     // Dispense the item if the amount due is paid in full.
     if (payment.value >= selection.value) {
       // NOTE: payment.process() will clear the payment value.
-      success = payment.process();
-      if (success) {
-        if (payment.value > selection.value) {
+      if (payment.process(selection.value)) {
+        if (payment.change > 0) {
           // TODO: Implement a driver for cash dispenser.
-          if (options.debug) { console.log(`Returning change of ${paymentValue}`); }
+          // FIX: Change value
+          if (options.debug) { console.log(`Returning change of ${payment.change}`); }
         }
         // Notify the consumer.
         if (options.debug) { console.log('Enjoy your product! Have a nice day.'); }

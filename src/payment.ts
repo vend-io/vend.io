@@ -4,10 +4,12 @@ export interface IPaymentMethod {
   type: string;
   /** Stores the amount paid */
   amount: number;
+  /** Stores the change to return (if applicable) */
+  change: number;
   /** Starts a transaction */
   pay(amount: number): boolean;
   /** Processes the transaction */
-  process();
+  process(amount: number): boolean;
 }
 
 /** Represents a payment method for card */
@@ -16,6 +18,7 @@ export class Card implements IPaymentMethod {
   private _cardNumber: number;
   private _expiry: Date;
   private _name: string;
+  private _change: number = 0;
   /**
    * @param {string} name The name on the card
    * @param {number} cardNumber The number on the card
@@ -32,7 +35,7 @@ export class Card implements IPaymentMethod {
    */
   pay(amount: number): boolean { this._amount = amount; return true; }
   /** Processes the transaction */
-  process() { this._amount = 0; return true; }
+  process(amount: number): boolean { this._amount = 0; return true; }
 
   /** The amount paid */
   get amount() { return this._amount; }
@@ -44,12 +47,15 @@ export class Card implements IPaymentMethod {
   get name() { return this._name; }
   /** The payment method type */
   get type(): string { return 'card'; }
+  /** The money to return */
+  get change(): number { return this._change; }
 
 }
 
 /** Represents a payment method for cash */
 export class Cash implements IPaymentMethod {
   private _amount: number = 0;
+  private _change: number = 0;
   /**
   * Starts a transaction
   * @param {number} amount The amount to pay
@@ -60,11 +66,13 @@ export class Cash implements IPaymentMethod {
     return true;
   }
   /** Processes the transaction */
-  process() { this._amount = 0; return true; }
+  process(amount: number): boolean { this._change = this._amount - amount; this._amount = 0; return true; }
   /** The amount paid */
   get amount(): number { return this._amount; }
   /** The payment method type */
   get type(): string { return 'cash'; }
+  /** The money to return */
+  get change(): number { return this._change; }
 }
 
 /** Represents a payment/transaction */
@@ -85,11 +93,13 @@ export default class Payment {
   */
   pay(amount: number): boolean { return this.method.pay(amount); }
   /** Processes the transaction */
-  process(): boolean { return this.method.process(); }
+  process(amount: number): boolean { return this.method.process(amount); }
 
   /** The payment method type */
   get type(): string { return this.method.type; }
   /** The total value of payment */
   get value(): number { return this.method.amount; }
+  /** The remaining change from a difference */
+  get change(): number { return Math.abs(this.method.change); }
 
 }
