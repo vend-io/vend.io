@@ -2,20 +2,16 @@ import State from './state';
 import Inventory from './inventory';
 import Selection from './selection';
 import Payment from './payment';
-import { OptionSchema } from './schema';
-import * as FS from 'fs';
-import * as Path from 'path';
-
-const configurationFile = FS.readFileSync(`${Path.resolve(__dirname, '../')}/vmconfig.json`, 'utf8');
-const options = JSON.parse(require('strip-json-comments')(configurationFile));
+import Options from './options';
 
 export class Core {
   inventory: Inventory;
   payment: Payment;
   selection: Selection;
-  options: OptionSchema = options;
+  options: Options;
   state: State;
   constructor() {
+    this.options = new Options();
     this.payment = new Payment();
     this.inventory = new Inventory();
     this.selection = new Selection();

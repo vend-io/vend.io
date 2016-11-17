@@ -1,32 +1,34 @@
-{
-  "debug": false,
-  "selection": {
-    "type": "single"
-  },
+import { OptionSchema, SelectionSchema, UISchema, PaymentSchema } from './schema';
+
+export default class Options implements OptionSchema {
+  debug = false;
+  selection: SelectionSchema = {
+    type: "single"
+  };
   // Configure the display for items.
-  "ui": {
+  ui: UISchema = {
     // Determines whether touch is enabled.
     //"touchEnabled": false, (out of scope)
     // Configures the number of rows in the display.
-    "rows": 1,
+    rows: 1,
     // Configures the number of rows in the display.
-    "columns": 2
-  },
-  "payment": {
+    columns: 2
+  };
+  payment: PaymentSchema = {
     // Configures the accepted methods of payment.
-    "methods": [
+    methods: [
       "coin"
       //"cash",
       //"card",
       //"nfc"
     ],
     // Configures the accepted currency for payment.
-    "currency": {
-      "default": "US",
-      "accepted": [
+    currency: {
+      default: "US",
+      accepted: [
         "US",
         "JPY"
       ]
     }
-  }
+  };
 }
