@@ -8,7 +8,7 @@ describe('Inventory', () => {
   describe('addItem()', () => {
     it('should add an item', () => {
       inventory.addItem(item);
-      assert.lengthOf(inventory.list, 1);
+      assert.lengthOf(inventory.items, 1);
     });
   });
 
@@ -26,14 +26,14 @@ describe('Inventory', () => {
 
   describe('removeItemId()', () => {
     it('should remove an item by id', () => {
-      assert.lengthOf(inventory.removeItemById('1').list, 0);
+      assert.lengthOf(inventory.removeItemById('1').items, 0);
     });
   });
 
   describe('removeItemName()', () => {
     it('should remove an item by name', () => {
       inventory.addItem(item);
-      assert.lengthOf(inventory.removeItemByName('Fanta Orange').list, 0);
+      assert.lengthOf(inventory.removeItemByName('Fanta Orange').items, 0);
     });
   });
 

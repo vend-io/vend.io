@@ -1,4 +1,5 @@
 import Item from './item';
+import { ItemSchema } from './schema';
 import * as _ from 'lodash';
 /** Represents an inventory that manages the stored items */
 export default class Inventory {
@@ -27,5 +28,5 @@ export default class Inventory {
   clear() { this._items = []; }
 
   /** A list of the items in inventory */
-  get list(): Item[] { return this._items; }
+  get items(): ItemSchema[] { return this._items.map(i => i.toJSON()); }
 }
