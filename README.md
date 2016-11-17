@@ -30,3 +30,7 @@ Code Editor Extensions:
     * editorconfig (vscode, atom)
   * Syntax Highlighting
     * atom-typescript (atom)
+
+## Contribute
+
+See ESLint's pull request [guidelines](http://eslint.org/docs/developer-guide/contributing/pull-requests)
