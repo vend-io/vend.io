@@ -10,11 +10,16 @@ Proposed features: support for multiple currencies, notification when stock reac
 
 ## Usage
 
-```bash
-npm i && node index.js
+```javascript
+const { Core } = require('vend.io');
+const machine = new Core(/* { options } */ );
 ```
 
-## Development Tools
+## Contribute
+
+See ESLint's pull request [guidelines](http://eslint.org/docs/developer-guide/contributing/pull-requests)
+
+### Development Tools
 
 Node.js v6.9+
 
@@ -30,7 +35,3 @@ Code Editor Extensions:
     * editorconfig (vscode, atom)
   * Syntax Highlighting
     * atom-typescript (atom)
-
-## Contribute
-
-See ESLint's pull request [guidelines](http://eslint.org/docs/developer-guide/contributing/pull-requests)
