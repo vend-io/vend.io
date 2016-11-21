@@ -1,3 +1,5 @@
+import Event from './event';
+
 /** A payment method interface */
 export interface IPaymentMethod {
   /** Stores the payment method type */
@@ -79,6 +81,7 @@ export class Cash implements IPaymentMethod {
 export default class Payment {
   /** Stores the payment method */
   method: IPaymentMethod;
+  event: Event = new Event();
 
   /** Cancels the transaction */
   cancel() { this.method.amount = 0; };

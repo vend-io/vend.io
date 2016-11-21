@@ -1,10 +1,11 @@
 import Item from './item';
+import Event from './event';
 import * as _ from 'lodash';
 /** Represents an inventory that manages the stored items */
 export default class Inventory {
   /** Stores the items and performs operations on it */
   private _items: Item[] = [];
-
+  event: Event = new Event();
   /** Adds an item to the inventory */
   addItem(item: Item): Inventory { this._items.push(item); return this; }
   /** Removes an item from the inventory by id */
@@ -23,9 +24,12 @@ export default class Inventory {
   isAvailableById(id: string): boolean { return this.findItemById(id).quantity > 0; }
   /** Determines whether an item is available by name */
   isAvailableByName(name: string): boolean { return this.findItemByName(name).quantity > 0; }
+  /** Updates the item quantity by id */
+  updateQuantityById(id: string, quantity: number) { this.findItemById(id).quantity = quantity; return this; }
+  /** Updates the item quantity by name */
+  updateQuantityByName(name: string, quantity: number) { this.findItemByName(name).quantity = quantity; return this; }
   /** Clears the inventory */
   clear() { this._items = []; }
-
   /** A list of the items in inventory */
   get items(): Item[] { return this._items; }
 }
