@@ -208,12 +208,13 @@ export class HasMoneyState implements IState {
         - Cancel the transaction.
         - Dispense the change if applicable.
     */
-    const { payment } = this.machine;
+    const { payment, state } = this.machine;
     if (payment.value > 0) {
       // TODO: Implement driver to Dispense cash.
       payment.cancel();
       payment.event.emit('canceled');
     }
+    state.transitionTo(States.IdleState);
   }
   get name(): string { return 'HasMoneyState'; }
 }
@@ -264,7 +265,7 @@ export class HasSelectedState implements IState {
     }
   }
   cancel() {
-    const { payment, selection } = this.machine;
+    const { payment, selection, state } = this.machine;
     /*
       Use Case: The consumer cancels the transaction.
       State: The consumer has not selected an item.
@@ -278,6 +279,7 @@ export class HasSelectedState implements IState {
       payment.event.emit('canceled');
     }
     selection.clear();
+    state.transitionTo(States.IdleState);
   }
   get name(): string { return 'HasSelectedState'; }
 }
