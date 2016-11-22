@@ -30,4 +30,13 @@ describe('Payment', () => {
       assert.equal(payment.change, value / 2);
     });
   });
+
+  describe('cancel()', () => {
+    it('should cancel the transaction', () => {
+      payment.method = cash;
+      payment.pay(value);
+      assert.equal(payment.cancel(), value);
+      assert.equal(payment.value, 0);
+    });
+  });
 });
