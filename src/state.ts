@@ -161,8 +161,8 @@ export class HasMoneyState implements IState {
         // payment.event.emit('processed');
         if (payment.change > 0) {
           // TODO: Implement a driver for cash dispenser.
-          if (options.debug) { console.log(`Returning change of ${payment.change}`); }
-          // payment.event.emit('returned', payment.change);
+          const refund = payment.refund();
+          if (options.debug) { console.log(`Refunding change of ${refund}`); }
         }
         // Notify the consumer.
         if (options.debug) { console.log('Enjoy your product! Have a nice day.'); }
@@ -176,6 +176,10 @@ export class HasMoneyState implements IState {
       // Clear the selection.
       selection.clear();
     } else {
+      if (payment.value > 0) {
+        const refund = payment.refund();
+        if (options.debug) { console.log(`Refunding change of ${refund}`); }
+      }
       if (this.machine.options.selection.type === 'single') {
         selection.clear();
       }

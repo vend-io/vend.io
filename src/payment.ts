@@ -105,9 +105,16 @@ export default class Payment {
     this.emitter.emit('process', amount, this.method.change, success = this.method.process(amount));
     return success;
   }
+  refund(): number {
+    const refund = this.method.amount;
+    this.method.amount = 0;
+    this.emitter.emit('refund', refund);
+    return refund;
+  }
   onPayment(listener: Function): Payment { this.emitter.addListener('payment', listener, this); return this; }
   onProcess(listener: Function): Payment { this.emitter.addListener('process', listener, this); return this; }
   onCancel(listener: Function): Payment { this.emitter.addListener('cancel', listener, this); return this; }
+  onRefund(listener: Function): Payment { this.emitter.addListener('refund', listener, this); return this; }
 
   /** The payment method type */
   get type(): string { return this.method.type; }
