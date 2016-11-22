@@ -16,11 +16,12 @@ export interface IPaymentMethod {
 
 /** Represents a payment method for card */
 export class Card implements IPaymentMethod {
-  private _amount: number = 0;
   private _cardNumber: number;
   private _expiry: Date;
   private _name: string;
   private _change: number = 0;
+  /** The amount paid */
+  amount: number = 0;
   /**
    * @param {string} name The name on the card
    * @param {number} cardNumber The number on the card
@@ -35,12 +36,11 @@ export class Card implements IPaymentMethod {
    * Starts a transaction
    * @param {number} amount The amount to pay
    */
-  pay(amount: number): boolean { this._amount = amount; return true; }
+  pay(amount: number): boolean { this.amount = amount; return true; }
   /** Processes the transaction */
-  process(amount: number): boolean { this._amount = 0; return true; }
+  process(amount: number): boolean { this.amount = 0; return true; }
 
-  /** The amount paid */
-  get amount() { return this._amount; }
+
   /** The number on the card */
   get cardNumber() { return this._cardNumber; }
   /** The expiry date on the card */
@@ -56,21 +56,21 @@ export class Card implements IPaymentMethod {
 
 /** Represents a payment method for cash */
 export class Cash implements IPaymentMethod {
-  private _amount: number = 0;
   private _change: number = 0;
+  /** The amount paid */
+  amount: number = 0;
   /**
   * Starts a transaction
   * @param {number} amount The amount to pay
   */
   pay(amount: number): boolean {
-    if (this._amount !== 0) { this._amount += amount; }
-    else { this._amount = amount; }
+    if (this.amount !== 0) { this.amount += amount; }
+    else { this.amount = amount; }
     return true;
   }
   /** Processes the transaction */
-  process(amount: number): boolean { this._change = this._amount - amount; this._amount = 0; return true; }
-  /** The amount paid */
-  get amount(): number { return this._amount; }
+  process(amount: number): boolean { this._change = this.amount - amount; this.amount = 0; return true; }
+
   /** The payment method type */
   get type(): string { return 'cash'; }
   /** The money to return */
@@ -111,9 +111,9 @@ export default class Payment {
     this.emitter.emit('refund', refund);
     return refund;
   }
+  onCancel(listener: Function): Payment { this.emitter.addListener('cancel', listener, this); return this; }
   onPayment(listener: Function): Payment { this.emitter.addListener('payment', listener, this); return this; }
   onProcess(listener: Function): Payment { this.emitter.addListener('process', listener, this); return this; }
-  onCancel(listener: Function): Payment { this.emitter.addListener('cancel', listener, this); return this; }
   onRefund(listener: Function): Payment { this.emitter.addListener('refund', listener, this); return this; }
 
   /** The payment method type */
