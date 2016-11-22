@@ -1,4 +1,4 @@
-import Event from './event';
+import { EventEmitter } from 'fbemitter';
 
 /** A payment method interface */
 export interface IPaymentMethod {
@@ -81,10 +81,10 @@ export class Cash implements IPaymentMethod {
 export default class Payment {
   /** Stores the payment method */
   method: IPaymentMethod;
-  event: Event = new Event();
+  emitter: EventEmitter = new EventEmitter();
 
   /** Cancels the transaction */
-  cancel() { this.method.amount = 0; };
+  cancel() { this.method.amount = 0; this.emitter.emit('cancel'); };
   /** Determines if the current payment method is card */
   isCard(): boolean { return this.method.type === 'card'; }
   /** Determines if the current payment method is cash */
@@ -94,9 +94,20 @@ export default class Payment {
   * Starts a transaction
   * @param {number} amount The amount to pay
   */
-  pay(amount: number): boolean { return this.method.pay(amount); }
+  pay(amount: number): boolean {
+    let success = false;
+    this.emitter.emit('payment', amount, success = this.method.pay(amount));
+    return success;
+  }
   /** Processes the transaction */
-  process(amount: number): boolean { return this.method.process(amount); }
+  process(amount: number): boolean {
+    let success = false;
+    this.emitter.emit('process', amount, this.method.change, success = this.method.process(amount));
+    return success;
+  }
+  onPayment(listener: Function): Payment { this.emitter.addListener('payment', listener, this); return this; }
+  onProcess(listener: Function): Payment { this.emitter.addListener('process', listener, this); return this; }
+  onCancel(listener: Function): Payment { this.emitter.addListener('cancel', listener, this); return this; }
 
   /** The payment method type */
   get type(): string { return this.method.type; }

@@ -1,17 +1,30 @@
 import Item from './item';
-import Event from './event';
+import { EventEmitter } from 'fbemitter';
 import * as _ from 'lodash';
+// import { Subject } from 'rxjs';
 /** Represents an inventory that manages the stored items */
 export default class Inventory {
   /** Stores the items and performs operations on it */
   private _items: Item[] = [];
-  event: Event = new Event();
+  emitter: EventEmitter = new EventEmitter();
   /** Adds an item to the inventory */
-  addItem(item: Item): Inventory { this._items.push(item); return this; }
+  addItem(item: Item): Inventory {
+    this._items.push(item);
+    this.emitter.emit('add', item, this._items);
+    return this;
+  }
   /** Removes an item from the inventory by id */
-  removeItemById(id: string): Inventory { _.remove(this._items, i => i.id === id); return this; }
+  removeItemById(id: string): Inventory {
+    _.remove(this._items, i => i.id === id);
+    this.emitter.emit('remove', this._items);
+    return this;
+  }
   /** Removes an item from the inventory by name */
-  removeItemByName(name: string): Inventory { _.remove(this._items, i => i.name === name); return this; }
+  removeItemByName(name: string): Inventory {
+    _.remove(this._items, i => i.name === name);
+    this.emitter.emit('remove', this._items);
+    return this;
+  }
   /** Finds an item by id */
   findItemById(id: string): Item { return this._items.filter(i => i.id === id)[0]; }
   /** Finds an item by name */
@@ -25,9 +38,20 @@ export default class Inventory {
   /** Determines whether an item is available by name */
   isAvailableByName(name: string): boolean { return this.findItemByName(name).quantity > 0; }
   /** Updates the item quantity by id */
-  updateQuantityById(id: string, quantity: number) { this.findItemById(id).quantity = quantity; return this; }
+  updateQuantityById(id: string, quantity: number) {
+    this.findItemById(id).quantity = quantity;
+    this.emitter.emit('update', this._items);
+    return this;
+  }
   /** Updates the item quantity by name */
-  updateQuantityByName(name: string, quantity: number) { this.findItemByName(name).quantity = quantity; return this; }
+  updateQuantityByName(name: string, quantity: number) {
+    this.findItemByName(name).quantity = quantity;
+    this.emitter.emit('update', this._items);
+    return this;
+  }
+  onAdd(listener: Function): Inventory { this.emitter.addListener('add', listener, this); return this; }
+  onUpdate(listener: Function): Inventory { this.emitter.addListener('update', listener, this); return this; }
+  onRemove(listener: Function): Inventory { this.emitter.addListener('remove', listener, this); return this; }
   /** Clears the inventory */
   clear() { this._items = []; }
   /** A list of the items in inventory */

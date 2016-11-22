@@ -1,22 +1,30 @@
 import Item from './item';
-import Event from './event';
+import { EventEmitter } from 'fbemitter';
 /**
  * Selection
  */
 export default class Selection {
   /** Stores the selected items */
   private _selected: Item[] = [];
-  event: Event = new Event();
+  emitter: EventEmitter = new EventEmitter();
+  // event: Event = new Event();
   // Note: addItem methods can be restricted to only add a single item!
   /**
    * Adds an item for Selection
    * @param {Item} item The item to select
    */
-  addItem(item: Item) { this._selected.push(item); return this; }
+  addItem(item: Item) {
+    this._selected.push(item);
+    this.emitter.emit('add', item, this._selected);
+    return this;
+  }
   /** Returns the quantity of an item by id */
   getQuantityOfItemById(id: string) { return this.selected.filter(i => i.id === id).length; }
   /** Returns the quantity of an item by name */
   getQuantityOfItemByName(name: string) { return this.selected.filter(i => i.name === name).length; }
+  onAdd(listener: Function): Selection { this.emitter.addListener('add', listener, this); return this; }
+  onUpdate(listener: Function): Selection { this.emitter.addListener('update', listener, this); return this; }
+  onRemove(listener: Function): Selection { this.emitter.addListener('remove', listener, this); return this; }
   /** Clears all selected items */
   clear() { this._selected = []; }
 
