@@ -7,10 +7,10 @@ export interface Schema { }
 
 /** A JSON schema for Option */
 export interface OptionSchema extends Schema {
-  debug: boolean;
-  selection: SelectionSchema;
-  ui: UISchema;
-  payment: PaymentSchema;
+  debug?: boolean;
+  selection?: SelectionSchema;
+  ui?: UISchema;
+  payment?: PaymentSchema;
 }
 
 /** A JSON schema for Option.Selection */
@@ -21,13 +21,13 @@ export interface SelectionSchema extends Schema {
 
 /** A JSON schema for Option.UI */
 export interface UISchema extends Schema {
-  rows: number;
-  columns: number;
+  rows?: number;
+  columns?: number;
 }
 
 /** A JSON schema for Option.Payment */
 export interface PaymentSchema extends Schema {
-  methods: string[];
+  methods: ['cash' | 'card'];
   currency: { default: string, accepted: string[] };
 }
 
