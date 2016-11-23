@@ -2,17 +2,25 @@
 
 An open source framework for vending machines (work in progress).
 
-### Typescript branch: 
-[![Build Status](https://travis-ci.org/vend-io/vend.io.svg?branch=typescript)](https://travis-ci.org/vend-io/vend.io)
+[![Build Status](https://travis-ci.org/vend-io/vend.io.svg?branch=master)](https://travis-ci.org/vend-io/vend.io)
 
 Proposed features: support for multiple currencies, notification when stock reaches half, support for at least one item.
 
 
 ## Usage
 
+Install package:
+```bash
+# Since vend.io has not be released on npm,
+# use the repo as the source.
+npm i --save https://github.com/vend-io/vend.io.git
+```
+Import:
 ```javascript
-const { Core } = require('vend.io');
-const machine = new Core(/* { options } */ );
+const { Core, Payment } = require('vend.io');
+const { Cash } = Payment;
+const machine = new Core(/* { options } */);
+machine.payment.method = new Cash();
 ```
 
 ## Contribute
