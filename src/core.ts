@@ -3,6 +3,7 @@ import Inventory from './inventory';
 import Selection from './selection';
 import Payment from './payment';
 import Options from './options';
+import { OptionSchema } from './schema';
 
 export class Core {
   inventory: Inventory;
@@ -10,8 +11,8 @@ export class Core {
   selection: Selection;
   options: Options;
   state: State;
-  constructor() {
-    this.options = new Options();
+  constructor(options?: OptionSchema) {
+    this.options = new Options(options);
     this.payment = new Payment();
     this.inventory = new Inventory();
     this.selection = new Selection();

@@ -11,7 +11,7 @@ Proposed features: support for multiple currencies, notification when stock reac
 
 Install package:
 ```bash
-# Since vend.io has not be released on npm,
+# Since vend.io has not be published on npm,
 # use the repo as the source.
 npm i --save https://github.com/vend-io/vend.io.git
 ```
