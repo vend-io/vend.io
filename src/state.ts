@@ -116,7 +116,6 @@ export class IdleState implements IState {
     const { payment, options } = this.machine;
     if (payment.value > 0) {
       // TODO: Implement driver to Dispense cash.
-      payment.cancel();
       const refund = payment.cancel();
       if (options.debug) { console.log(`Refunding change of ${refund}`); }
       // payment.event.emit('canceled');
@@ -163,7 +162,7 @@ export class HasMoneyState implements IState {
         // payment.event.emit('processed');
         if (payment.change > 0) {
           // TODO: Implement a driver for cash dispenser.
-          if (options.debug) { console.log(`Refunding change of ${payment.change}`); }
+          if (options.debug) { console.log(`Returning change of ${payment.change}`); }
         }
         // Notify the consumer.
         if (options.debug) { console.log('Enjoy your product! Have a nice day.'); }
@@ -211,7 +210,6 @@ export class HasMoneyState implements IState {
     const { payment, state, options } = this.machine;
     if (payment.value > 0) {
       // TODO: Implement driver to Dispense cash.
-      payment.cancel();
       const refund = payment.cancel();
       if (options.debug) { console.log(`Refunding change of ${refund}`); }
       // payment.event.emit('canceled');
