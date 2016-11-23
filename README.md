@@ -11,17 +11,24 @@ Proposed features: support for multiple currencies, notification when stock reac
 
 Install package:
 ```bash
-# Since vend.io has not be published on npm,
+# Since vend.io has not been published on npm,
 # use the repo as the source.
 npm i --save https://github.com/vend-io/vend.io.git
 ```
 Import:
 ```javascript
-const { Core, Payment } = require('vend.io');
+const { Core, Payment, Item } = require('vend.io');
 const { Cash } = Payment;
+// Create a vending machine
 const machine = new Core(/* { options } */);
+// Set payment method
 machine.payment.method = new Cash();
+machine.inventory.addItem(new Item(/* See documentation for formal parameters */));
 ```
+
+## Documentation
+
+See [documentation](https://rawgit.com/vend-io/vend.io/master/docs/index.html) via RawGit.
 
 ## Contribute
 

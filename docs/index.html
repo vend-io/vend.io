@@ -70,16 +70,21 @@
 				<p>Proposed features: support for multiple currencies, notification when stock reaches half, support for at least one item.</p>
 				<h2 id="usage">Usage</h2>
 				<p>Install package:</p>
-				<pre><code class="lang-bash"><span class="hljs-comment"># Since vend.io has not be published on npm,</span>
+				<pre><code class="lang-bash"><span class="hljs-comment"># Since vend.io has not been published on npm,</span>
 <span class="hljs-comment"># use the repo as the source.</span>
 npm i --save https://github.com/vend-io/vend.io.git
 </code></pre>
 				<p>Import:</p>
-				<pre><code class="lang-javascript"><span class="hljs-keyword">const</span> { Core, Payment } = <span class="hljs-built_in">require</span>(<span class="hljs-string">'vend.io'</span>);
+				<pre><code class="lang-javascript"><span class="hljs-keyword">const</span> { Core, Payment, Item } = <span class="hljs-built_in">require</span>(<span class="hljs-string">'vend.io'</span>);
 <span class="hljs-keyword">const</span> { Cash } = Payment;
+<span class="hljs-comment">// Create a vending machine</span>
 <span class="hljs-keyword">const</span> machine = <span class="hljs-keyword">new</span> Core(<span class="hljs-comment">/* { options } */</span>);
+<span class="hljs-comment">// Set payment method</span>
 machine.payment.method = <span class="hljs-keyword">new</span> Cash();
+machine.inventory.addItem(<span class="hljs-keyword">new</span> Item(<span class="hljs-comment">/* See documentation for formal parameters */</span>));
 </code></pre>
+				<h2 id="documentation">Documentation</h2>
+				<p>See <a href="https://rawgit.com/vend-io/vend.io/master/docs/index.html">documentation</a> via RawGit.</p>
 				<h2 id="contribute">Contribute</h2>
 				<p>See ESLint&#39;s pull request <a href="http://eslint.org/docs/developer-guide/contributing/pull-requests">guidelines</a></p>
 				<h3 id="development-tools">Development Tools</h3>
