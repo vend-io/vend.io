@@ -19,6 +19,7 @@ Import:
 ```javascript
 const { Core, Payment, Item } = require('vend.io');
 const { Cash } = Payment;
+
 // Create a vending machine
 const machine = new Core(/* { options } */);
 // Set payment method
