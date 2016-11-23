@@ -82,8 +82,15 @@ npm i --save https://github.com/vend-io/vend.io.git
 <span class="hljs-keyword">const</span> machine = <span class="hljs-keyword">new</span> Core(<span class="hljs-comment">/* { options } */</span>);
 <span class="hljs-comment">// Set payment method</span>
 machine.payment.method = <span class="hljs-keyword">new</span> Cash();
+<span class="hljs-comment">// Add items to inventory</span>
 machine.inventory
 .addItem(<span class="hljs-keyword">new</span> Item(<span class="hljs-comment">/* See documentation for formal parameters */</span>));
+<span class="hljs-comment">// Enable debugging</span>
+machine.options.debug = <span class="hljs-literal">true</span>;
+
+<span class="hljs-comment">// Enjoy!</span>
+machine.pay(<span class="hljs-number">0.50</span>);
+machine.selectById(<span class="hljs-number">1</span>);
 </code></pre>
 				<h2 id="documentation">Documentation</h2>
 				<p>See <a href="https://rawgit.com/vend-io/vend.io/master/docs/index.html">documentation</a> via RawGit.</p>
@@ -122,6 +129,9 @@ machine.inventory
 					</li>
 					<li class=" tsd-kind-external-module">
 						<a href="modules/_core_.html">"core"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_index_.html">"index"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
 						<a href="modules/_inventory_.html">"inventory"</a>

@@ -5,7 +5,7 @@ import Payment from './payment';
 import Options from './options';
 import { OptionSchema } from './schema';
 
-export class Core {
+export default class Core {
   inventory: Inventory;
   payment: Payment;
   selection: Selection;

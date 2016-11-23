@@ -1,4 +1,4 @@
-import { Core } from './core';
+import Core from './core';
 
 export interface IState {
   name: string;
@@ -59,8 +59,9 @@ export class IdleState implements IState {
     const { inventory, selection, options } = this.machine;
     // Notify the consumer if the selected item is sold out.
     if (!inventory.isAvailableById(id)) {
+      const item = inventory.findItemById(id);
       // Notify the consumer the cost and availability of the selected item.
-      if (options.debug) { console.log(`${inventory.findItemById(id).name} is not available.`); }
+      if (options.debug) { console.log(item ? `${item.name} is not available.` : 'Item does not exist.'); }
     } else {
       // Check whether multiple selection is enabled.
       if (this.machine.options.selection.type === 'single') {
@@ -135,7 +136,9 @@ export class HasMoneyState implements IState {
     // Notify the consumer if the selected item is sold out.
     // TODO: Observer pattern.
     if (!inventory.isAvailableById(id)) {
-      if (options.debug) { console.log(`${inventory.findItemById(id).name} is not available.`); }
+      const item = inventory.findItemById(id);
+      // Notify the consumer the cost and availability of the selected item.
+      if (options.debug) { console.log(item ? `${item.name} is not available.` : 'Item does not exist.'); }
     } else {
       // Determine whether multiple selection is enabled.
       if (this.machine.options.selection.type === 'single') {
@@ -221,8 +224,9 @@ export class HasSelectedState implements IState {
     // Notify the consumer if the selected item is sold out.
     // TODO: Observer pattern.
     if (!inventory.isAvailableById(id)) {
+      const item = inventory.findItemById(id);
       // Notify the consumer the cost and availability of the selected item.
-      if (options.debug) { console.log(`${inventory.findItemById(id).name} is not available.`); }
+      if (options.debug) { console.log(item ? `${item.name} is not available.` : 'Item does not exist.'); }
     } else {
       // Store the initial item.
       selection.addItem(inventory.findItemById(id));

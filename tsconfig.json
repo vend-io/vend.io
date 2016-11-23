@@ -23,7 +23,7 @@
     "node_modules",
     "typings/browser",
     "typings/browser.d.ts",
-    "example",
+    "examples/**",
     "test"
   ],
   "compileOnSave": true,

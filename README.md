@@ -24,8 +24,15 @@ const { Cash } = Payment;
 const machine = new Core(/* { options } */);
 // Set payment method
 machine.payment.method = new Cash();
+// Add items to inventory
 machine.inventory
 .addItem(new Item(/* See documentation for formal parameters */));
+// Enable debugging
+machine.options.debug = true;
+
+// Enjoy!
+machine.pay(0.50);
+machine.selectById(1);
 ```
 
 ## Documentation

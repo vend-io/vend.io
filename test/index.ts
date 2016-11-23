@@ -1,4 +1,4 @@
-import { Core } from '../src/core';
+import Core from '../src/core';
 import Item from '../src/item';
 import { Cash } from '../src/payment';
 import { assert } from 'chai';

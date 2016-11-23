@@ -34,9 +34,9 @@ export default class Inventory {
   /** Determines whether the items are available */
   isAvailableByItems(items: Item[]): boolean { return !(items.map(i => i.quantity > 0).indexOf(false) > -1); }
   /** Determines whether an item is available by id */
-  isAvailableById(id: string): boolean { return this.findItemById(id).quantity > 0; }
+  isAvailableById(id: string): boolean { const item = this.findItemById(id); return item && item.quantity > 0; }
   /** Determines whether an item is available by name */
-  isAvailableByName(name: string): boolean { return this.findItemByName(name).quantity > 0; }
+  isAvailableByName(name: string): boolean { const item = this.findItemByName(name); return item && item.quantity > 0; }
   /** Updates the item quantity by id */
   updateQuantityById(id: string, quantity: number) {
     this.findItemById(id).quantity = quantity;

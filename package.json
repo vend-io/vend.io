@@ -16,6 +16,7 @@
   "devDependencies": {
     "@types/chai": "^3.4.34",
     "@types/mocha": "^2.2.33",
+    "app-root-path": "^2.0.1",
     "chai": "^3.5.0",
     "mocha": "^3.1.2",
     "ts-node": "^1.7.0",
@@ -26,7 +27,10 @@
   "scripts": {
     "test": "mocha --opts mocha.opts",
     "test:watch": "mocha --opts mocha.opts --watch",
-    "generate:docs": "node_modules/.bin/typedoc --out ./docs/ ./src/"
+    "docs:generate": "node_modules/.bin/typedoc --out ./docs/ ./src/",
+    "docs:serve": "node server.docs.js",
+    "example:basic": "node_modules/.bin/ts-node -P examples/basic/ examples/basic/",
+    "example:simulator": "cd examples/simulator && npm i && node_modules/.bin/next && cd ../../"
   },
   "repository": {
     "type": "git",
