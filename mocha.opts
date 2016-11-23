@@ -1,0 +1,3 @@
+--watch-extensions tsx,ts
+--require mocha.hook.js
+test/**/*.ts
