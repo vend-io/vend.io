@@ -60,7 +60,6 @@ export class IdleState implements IState {
     // Notify the consumer if the selected item is sold out.
     if (!inventory.isAvailableById(id)) {
       // Notify the consumer the cost and availability of the selected item.
-      // selection.event.emit('selected', [inventory.findItemByName(id)], false);
       if (options.debug) { console.log(`${inventory.findItemById(id).name} is not available.`); }
     } else {
       // Check whether multiple selection is enabled.
@@ -70,13 +69,10 @@ export class IdleState implements IState {
         // Store the initial item.
         selection.addItem(inventory.findItemById(id));
         // Notify the consumer the cost and availability of the selected item.
-        // selection.event.emit('selected', selection.selected, true);
         if (options.debug) { console.log(`Cost of ${inventory.findItemById(id).name} is ${inventory.findItemById(id).cost}`); }
       } else {
         // Store the initial item.
         selection.addItem(inventory.findItemById(id));
-        // Notify the consumer the cost and availability of the selected item.
-        // selection.event.emit('selected', selection.selected, true);
         // Transition to HasSelectedState.
         this.machine.state.transitionTo(States.HasSelectedState);
       }
@@ -94,14 +90,12 @@ export class IdleState implements IState {
     const { payment, options } = this.machine;
     // Validate the payment.
     if (payment.pay(amount)) {
-      // payment.event.emit('payed', amount, false);
       // Transition to HasCashState.
       this.machine.state.transitionTo(States.HasMoneyState);
     } else {
       // Notify the consumer if the payment method failed.
       if (options.debug) { console.log('Please use an alternative form of payment.'); }
       // Notify the consumer if the payment method failed.
-      // payment.event.emit('error', 'Please use an alternative form of payment.');
     }
   }
 
@@ -118,7 +112,6 @@ export class IdleState implements IState {
       // TODO: Implement driver to Dispense cash.
       const refund = payment.cancel();
       if (options.debug) { console.log(`Refunding change of ${refund}`); }
-      // payment.event.emit('canceled');
     }
   }
   get name(): string { return 'IdleState'; }
@@ -142,8 +135,6 @@ export class HasMoneyState implements IState {
     // Notify the consumer if the selected item is sold out.
     // TODO: Observer pattern.
     if (!inventory.isAvailableById(id)) {
-      // Notify the consumer the cost and availability of the selected item.
-      // selection.event.emit('selected', [inventory.findItemByName(id)], false);
       if (options.debug) { console.log(`${inventory.findItemById(id).name} is not available.`); }
     } else {
       // Determine whether multiple selection is enabled.
@@ -151,7 +142,6 @@ export class HasMoneyState implements IState {
         if (selection.count > 0) { selection.clear(); }
         // Store the item.
         selection.addItem(inventory.findItemById(id));
-        // selection.event.emit('selected', selection.selected, true);
       }
     }
 
@@ -159,7 +149,6 @@ export class HasMoneyState implements IState {
     if (payment.value >= selection.value) {
       // NOTE: payment.process() will clear the payment value.
       if (payment.process(selection.value)) {
-        // payment.event.emit('processed');
         if (payment.change > 0) {
           // TODO: Implement a driver for cash dispenser.
           if (options.debug) { console.log(`Returning change of ${payment.change}`); }
@@ -194,7 +183,6 @@ export class HasMoneyState implements IState {
     const { payment } = this.machine;
     // Limit additional payments to cash.
     if (payment.isCash()) {
-      // payment.event.emit('payed', amount, false);
       // Increment the amount paid in cash.
       payment.pay(amount);
     }
@@ -212,7 +200,6 @@ export class HasMoneyState implements IState {
       // TODO: Implement driver to Dispense cash.
       const refund = payment.cancel();
       if (options.debug) { console.log(`Refunding change of ${refund}`); }
-      // payment.event.emit('canceled');
     }
     state.transitionTo(States.IdleState);
   }
@@ -235,13 +222,10 @@ export class HasSelectedState implements IState {
     // TODO: Observer pattern.
     if (!inventory.isAvailableById(id)) {
       // Notify the consumer the cost and availability of the selected item.
-      // selection.event.emit('selected', [inventory.findItemByName(id)], false);
       if (options.debug) { console.log(`${inventory.findItemById(id).name} is not available.`); }
     } else {
       // Store the initial item.
       selection.addItem(inventory.findItemById(id));
-      // Notify the consumer the cost and availability of the selected item.
-      // selection.event.emit('selected', selection.selected, true);
     }
   }
   pay(amount: number) {
@@ -261,7 +245,6 @@ export class HasSelectedState implements IState {
     } else {
       // Notify the consumer if the payment method failed.
       if (options.debug) { console.log('Please use an alternative form of payment.'); }
-      // payment.event.emit('error', 'Please use an alternative form of payment.');
     }
   }
   cancel() {
@@ -277,7 +260,6 @@ export class HasSelectedState implements IState {
       // TODO: Implement driver to Dispense cash.
       const refund = payment.cancel();
       if (options.debug) { console.log(`Refunding change of ${refund}`); }
-      // payment.event.emit('canceled');
     }
     selection.clear();
     state.transitionTo(States.IdleState);
