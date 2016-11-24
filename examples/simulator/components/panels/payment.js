@@ -22,7 +22,7 @@ export default class PaymentPanel extends React.Component {
             `${change > 0 ? `Returning $${change.toFixed(2)}.\n`: ''}Enjoy your product! Have a nice day.` : 
             'Item is out of stock.'
           });
-          console.log(payment.change, state.name);
+          // console.log(payment.change, state.name);
         } else { this.setState({ message: 'Please use an alternative form of payment.' })}
       } else { this.setState({ message: 'Item is out of stock.' });  }
       setTimeout(() => { this.setState({ message: '' })}, 8000);
@@ -38,7 +38,7 @@ export default class PaymentPanel extends React.Component {
   }
   paymentHandler(event) {
     const { machine } = this.props;
-    console.log('selected', machine.selection.selected.length > 0)
+    // console.log('selected', machine.selection.selected.length > 0)
     const previousValue = parseFloat(this.state.amount);
     const newValue = parseFloat($('input[name="amountInput"]').val());
     const amount = isNaN(newValue) ? 0 : (previousValue + newValue).toFixed(2);

@@ -71,7 +71,7 @@ var PaymentPanel = function (_React$Component) {
             _this2.setState({ amount: payment.value,
               message: selected.quantity > 0 ? (change > 0 ? 'Returning $' + change.toFixed(2) + '.\n' : '') + 'Enjoy your product! Have a nice day.' : 'Item is out of stock.'
             });
-            console.log(payment.change, state.name);
+            // console.log(payment.change, state.name);
           } else {
             _this2.setState({ message: 'Please use an alternative form of payment.' });
           }
@@ -99,8 +99,8 @@ var PaymentPanel = function (_React$Component) {
     key: 'paymentHandler',
     value: function paymentHandler(event) {
       var machine = this.props.machine;
+      // console.log('selected', machine.selection.selected.length > 0)
 
-      console.log('selected', machine.selection.selected.length > 0);
       var previousValue = parseFloat(this.state.amount);
       var newValue = parseFloat((0, _jquery2.default)('input[name="amountInput"]').val());
       var amount = isNaN(newValue) ? 0 : (previousValue + newValue).toFixed(2);
