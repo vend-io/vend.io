@@ -35,6 +35,15 @@ machine.pay(0.50);
 machine.selectById(1);
 ```
 
+Try running some examples:
+```bash
+# Run a basic example
+npm run example:basic
+# Run a soda vending machine simulator
+# and navigate to localhost:3000
+npm run example:simulator
+```
+
 ## Documentation
 
 See [documentation](https://rawgit.com/vend-io/vend.io/master/docs/index.html) via RawGit.
