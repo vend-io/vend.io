@@ -14,7 +14,7 @@ describe('Export', () => {
     assert.isUndefined(Payment.default);
   });
 
-  it('should export Core', () => {
+  it('should export Item', () => {
     assert.isDefined(Item);
     assert.isFunction(Item);
     assert.isUndefined(Item.default);

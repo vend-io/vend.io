@@ -25,12 +25,12 @@ export default class PaymentPanel extends React.Component {
           // console.log(payment.change, state.name);
         } else { this.setState({ message: 'Please use an alternative form of payment.' })}
       } else { this.setState({ message: 'Item is out of stock.' });  }
-      setTimeout(() => { this.setState({ message: '' })}, 8000);
+      setTimeout(() => { this.setState({ message: '' })}, 5000);
     });
 
     payment.onCancel((change) => {
       this.setState({ message: `Returning $${change.toFixed(2)}`});
-      setTimeout(() => { this.setState({ message: '' })}, 8000);
+      setTimeout(() => { this.setState({ message: '' })}, 5000);
     });
   }
   submitHandler(event) {
@@ -48,12 +48,11 @@ export default class PaymentPanel extends React.Component {
   }
   clearHandler(event) {
     const { machine } = this.props;
+    machine.cancel();
     this.setState({
-      amount: 0,
-      message: ''
+      amount: 0
     });
     $('input[name="amountInput"]').val('');
-    machine.cancel();
   }
   render() {
     const { machine } = this.props;
