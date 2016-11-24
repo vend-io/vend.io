@@ -64,7 +64,8 @@ webpackHotUpdate(2,{
 
 	      var _props$machine = this.props.machine,
 	          payment = _props$machine.payment,
-	          selection = _props$machine.selection;
+	          selection = _props$machine.selection,
+	          state = _props$machine.state;
 
 	      payment.method = new Cash();
 
@@ -75,7 +76,7 @@ webpackHotUpdate(2,{
 	            _this2.setState({ amount: payment.value,
 	              message: selected.quantity > 0 ? (change > 0 ? 'Returning $' + change.toFixed(2) + '.\n' : '') + 'Enjoy your product! Have a nice day.' : 'Item is out of stock.'
 	            });
-	            console.log(payment.change);
+	            console.log(payment.change, state.name);
 	          } else {
 	            _this2.setState({ message: 'Please use an alternative form of payment.' });
 	          }

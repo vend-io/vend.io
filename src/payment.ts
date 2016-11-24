@@ -70,7 +70,7 @@ export class Cash implements IPaymentMethod {
   }
   /** Processes the transaction */
   process(amount: number): boolean {
-    this._change = this.amount > amount ? this.amount - amount : 0; 
+    this._change = this.amount - amount;
     this.amount = 0;
     return true; 
   }

@@ -9,7 +9,7 @@ export default class PaymentPanel extends React.Component {
     this.state = { amount: 0, message: '', };
   }
   componentDidMount() {
-    const { payment, selection } = this.props.machine;
+    const { payment, selection, state } = this.props.machine;
     payment.method = new Cash();
 
     payment.onProcess((amount, change, success) => {
@@ -22,7 +22,7 @@ export default class PaymentPanel extends React.Component {
             `${change > 0 ? `Returning $${change.toFixed(2)}.\n`: ''}Enjoy your product! Have a nice day.` : 
             'Item is out of stock.'
           });
-          console.log(payment.change);
+          console.log(payment.change, state.name);
         } else { this.setState({ message: 'Please use an alternative form of payment.' })}
       } else { this.setState({ message: 'Item is out of stock.' });  }
       setTimeout(() => { this.setState({ message: '' })}, 8000);
