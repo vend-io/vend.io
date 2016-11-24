@@ -31,6 +31,18 @@ describe('Use Cases', () => {
                 machine.selectById('1');
                 assert.equal(machine.state.name, 'IdleState');
             });
+            it('should return the change', () => {
+                assert.equal(machine.payment.change, 0.01);
+            });
+            it('should reset the change if consumer pays again', () => {
+                machine.pay(1.99);
+                assert.equal(machine.payment.change, 0);
+                machine.selectById('1');
+                assert.equal(machine.payment.change, 0);
+            });
+            it('should decrement the number of items in stock for the selected item', () => {
+                assert.equal(machine.inventory.findItemById('1').quantity, 3);
+            });
         });
     });
 });

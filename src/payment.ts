@@ -65,7 +65,7 @@ export class Cash implements IPaymentMethod {
   */
   pay(amount: number): boolean {
     if (this.amount !== 0) { this.amount += amount; }
-    else { this.amount = amount; }
+    else { this.amount = amount; this._change = 0; }
     return true;
   }
   /** Processes the transaction */
@@ -122,6 +122,6 @@ export default class Payment {
   /** The total value of payment */
   get value(): number { return this.method.amount; }
   /** The remaining change from a difference */
-  get change(): number { return Math.abs(this.method.change); }
+  get change(): number { return Math.round(this.method.change * 100) / 100; }
 
 }
