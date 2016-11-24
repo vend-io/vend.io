@@ -114,7 +114,8 @@ var PaymentPanel = function (_React$Component) {
       var machine = this.props.machine;
 
       this.setState({
-        amount: 0
+        amount: 0,
+        message: ''
       });
       (0, _jquery2.default)('input[name="amountInput"]').val('');
       machine.cancel();

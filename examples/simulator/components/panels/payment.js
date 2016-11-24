@@ -50,6 +50,7 @@ export default class PaymentPanel extends React.Component {
     const { machine } = this.props;
     this.setState({
       amount: 0,
+      message: ''
     });
     $('input[name="amountInput"]').val('');
     machine.cancel();
