@@ -22,7 +22,7 @@ export default class PaymentPanel extends React.Component {
             `${change > 0 ? `Returning $${change.toFixed(2)}.\n`: ''}Enjoy your product! Have a nice day.` : 
             'Item is out of stock.'
           });
-          console.log(payment.value);
+          console.log(payment.change);
         } else { this.setState({ message: 'Please use an alternative form of payment.' })}
       } else { this.setState({ message: 'Item is out of stock.' });  }
       setTimeout(() => { this.setState({ message: '' })}, 8000);

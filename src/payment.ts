@@ -71,7 +71,8 @@ export class Cash implements IPaymentMethod {
   /** Processes the transaction */
   process(amount: number): boolean {
     this._change = this.amount > amount ? this.amount - amount : 0; 
-    this.amount = 0; return true; 
+    this.amount = 0;
+    return true; 
   }
 
   /** The payment method type */
@@ -110,7 +111,7 @@ export default class Payment {
   /** Processes the transaction */
   process(amount: number): boolean {
     let success = false;
-    this.emitter.emit('process', amount, this.method.change, success = this.method.process(amount));
+    this.emitter.emit('process', amount, this.change, success = this.method.process(amount));
     return success;
   }
   onCancel(listener: Function): Payment { this.emitter.addListener('cancel', listener, this); return this; }
