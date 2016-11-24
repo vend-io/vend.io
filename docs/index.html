@@ -78,15 +78,13 @@ npm i --save https://github.com/vend-io/vend.io.git
 				<pre><code class="lang-javascript"><span class="hljs-keyword">const</span> { Core, Payment, Item } = <span class="hljs-built_in">require</span>(<span class="hljs-string">'vend.io'</span>);
 <span class="hljs-keyword">const</span> { Cash } = Payment;
 
-<span class="hljs-comment">// Create a vending machine</span>
-<span class="hljs-keyword">const</span> machine = <span class="hljs-keyword">new</span> Core(<span class="hljs-comment">/* { options } */</span>);
+<span class="hljs-comment">// Create a vending machine and enable debugging</span>
+<span class="hljs-keyword">const</span> machine = <span class="hljs-keyword">new</span> Core({ <span class="hljs-attr">debug</span>: <span class="hljs-literal">true</span> });
 <span class="hljs-comment">// Set payment method</span>
 machine.payment.method = <span class="hljs-keyword">new</span> Cash();
 <span class="hljs-comment">// Add items to inventory</span>
 machine.inventory
 .addItem(<span class="hljs-keyword">new</span> Item(<span class="hljs-comment">/* See documentation for formal parameters */</span>));
-<span class="hljs-comment">// Enable debugging</span>
-machine.options.debug = <span class="hljs-literal">true</span>;
 
 <span class="hljs-comment">// Enjoy!</span>
 machine.pay(<span class="hljs-number">0.50</span>);

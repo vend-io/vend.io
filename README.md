@@ -20,15 +20,13 @@ Import:
 const { Core, Payment, Item } = require('vend.io');
 const { Cash } = Payment;
 
-// Create a vending machine
-const machine = new Core(/* { options } */);
+// Create a vending machine and enable debugging
+const machine = new Core({ debug: true });
 // Set payment method
 machine.payment.method = new Cash();
 // Add items to inventory
 machine.inventory
 .addItem(new Item(/* See documentation for formal parameters */));
-// Enable debugging
-machine.options.debug = true;
 
 // Enjoy!
 machine.pay(0.50);

@@ -3,9 +3,7 @@ import Item from '../../src/item';
 import { Cash } from '../../src/payment';
 
 // Create a vending machine
-const machine = new Core(/* { options } */);
-// Enable debugging
-machine.options.debug = true;
+const machine = new Core({ debug: true });
 // Set payment method
 machine.payment.method = new Cash();
 // Add items to inventory
